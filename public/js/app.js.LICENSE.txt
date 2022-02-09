@@ -1,0 +1,45 @@
+/*
+ |  tail.select - The vanilla solution to make your HTML select fields AWESOME!
+ |  @file       ./js/tail.select-full.js
+ |  @author     SamBrishes <sam@pytes.net>
+ |  @version    0.5.15 - Beta
+ |
+ |  @website    https://github.com/pytesNET/tail.select
+ |  @license    X11 / MIT License
+ |  @copyright  Copyright © 2014 - 2019 SamBrishes, pytesNET <info@pytes.net>
+ */
+
+/*!
+ * 
+ *     Litepicker v1.5.7 (https://github.com/wakirin/Litepicker)
+ *     Package: litepicker (https://www.npmjs.com/package/litepicker)
+ *     License: MIT (https://github.com/wakirin/Litepicker/blob/master/LICENCE.md)
+ *     Copyright 2019-2020 Rinat G.
+ *     
+ *     Hash: 85b7ce11883a11b98abb
+ *     Generated on: 1592979305748
+ *     
+ */
+
+/*!
+ * Chart.js v2.9.4
+ * https://www.chartjs.org
+ * (c) 2020 Chart.js Contributors
+ * Released under the MIT License
+ */
+
+/*!
+ * Toastify js 1.9.3
+ * https://github.com/apvarun/toastify-js
+ * @license MIT licensed
+ *
+ * Copyright (C) 2018 Varun A P
+ */
+
+/*! VelocityJS.org (1.5.2). (C) 2014 Julian Shapiro. MIT @license: en.wikipedia.org/wiki/MIT_License */
+
+/*! VelocityJS.org jQuery Shim (1.0.1). (C) 2014 The jQuery Foundation. MIT @license: en.wikipedia.org/wiki/MIT_License. */
+
+//! moment.js
+
+//! moment.js locale configuration
