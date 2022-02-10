@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class CreateSchoolYears extends Migration
+class CreateDepartments extends Migration
 {
     public function up()
     {
@@ -19,16 +19,22 @@ class CreateSchoolYears extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => '255',
             ],
-            'is_latest' => [
-                'type' => 'BOOLEAN',
+            'created_at' => [
+                'type' => 'DATETIME',
+            ],
+            'updated_at' => [
+                'type' => 'DATETIME',
+            ],
+            'deleted_at' => [
+                'type' => 'DATETIME',
             ],
         ]);
         $this->forge->addKey('id', true);
-        $this->forge->createTable('school_years');
+        $this->forge->createTable('departments');
     }
 
     public function down()
     {
-        $this->forge->dropTable('school_years');
+        $this->forge->dropTable('departments');
     }
 }

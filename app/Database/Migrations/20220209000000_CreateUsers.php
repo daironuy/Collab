@@ -23,21 +23,33 @@ class CreateUsers extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => '255',
             ],
-            'fname' => [
+            'first_name' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
             ],
-            'mname' => [
+            'middle_name' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
             ],
-            'lname' => [
+            'last_name' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
             ],
-            'status' => [
+            'is_admin' => [
+                'type' => 'BOOLEAN',
+            ],
+            'is_active' => [
                 'type' => 'INT',
                 'constraint' => 11,
+            ],
+            'created_at' => [
+                'type' => 'DATETIME',
+            ],
+            'updated_at' => [
+                'type' => 'DATETIME',
+            ],
+            'deleted_at' => [
+                'type' => 'DATETIME',
             ],
         ]);
         $this->forge->addKey('id', true);
