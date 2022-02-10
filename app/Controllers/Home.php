@@ -4,13 +4,15 @@ namespace App\Controllers;
 
 class Home extends BaseController
 {
-    function pr($data){
-        echo '<pre>';
-        print_r($data);
-        echo '</pre>';
+    public function index(){
+        $session = session();
+
+        $this->pr($session->get());
+
+        echo "Welcome back, ".$session->get('name');
     }
 
-    public function index()
+    public function showAllUser()
     {
         $userModel = new \App\Models\UserModel();
 
