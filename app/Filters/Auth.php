@@ -8,9 +8,8 @@ class Auth implements FilterInterface
 {
     public function before(RequestInterface $request, $arguments = null)
     {
-// if user not logged in
-        if (!session()->get('logged_in')) {
-// then redirct to login page
+        $auth = session()->get('auth');
+        if (!$auth) {
             return redirect()->to('/users/login');
         }
     }

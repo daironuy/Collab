@@ -60,19 +60,19 @@ class Users extends BaseController
             }
             else if(!password_verify($password, $data['password'])){
                 array_push($errors, 'Wrong Password!');
+            } else if($data['is_active']==0){
+                array_push($errors, 'Please wait for admin to verify your account!');
             }
         }
 
         if(count($errors)!=0){
-            $session = session();
             $session->setFlashdata('form', $_REQUEST);
             $session->setFlashdata('error', '<ul class="list-disc pl-5"><li>'.implode('</li><li>', $errors).'</li></ul>');
 
             return redirect()->to('/users/login');
         }
 
-        $data['logged_in'] = TRUE;
-        $session->set($data);
+        $session->set(['auth'=>$data]);
         return redirect()->to('/');
     }
 
