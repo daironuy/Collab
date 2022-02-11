@@ -37,31 +37,43 @@ class Users extends BaseController
             return 0;
         }
 
+        $errors = [];
 
+        if($this->request->getVar('email')==''){
+            array_push($errors, 'Email should not be empty!');
+        }
+        if($this->request->getVar('password')==''){
+            array_push($errors, 'Password should not be empty!');
+        }
 
         $session = session();
         $model = new UserModel();
         $email = $this->request->getVar('email');
         $password = $this->request->getVar('password');
+        $data = [];
 
-        $data = $model->where('email', $email)->first();
-        if ($data) {
-            $pass = $data['password'];
-            $verify_pass = password_verify($password, $pass);
-            if ($verify_pass) {
-                $data['logged_in'] = TRUE;
-                $session->set($data);
-                return redirect()->to('/');
-            } else {
-                $session->setFlashdata('form', ['email'=>$email]);
-                $session->setFlashdata('error', 'Wrong Password!');
-                return redirect()->to('/users/login');
+        if(count($errors)==0){
+            $data = $model->where('email', $email)->first();
+
+            if(!$data){
+                array_push($errors, 'Account does not exsist!');
             }
-        } else {
-            $session->setFlashdata('form', ['email'=>$email]);
-            $session->setFlashdata('error', 'Email not Found');
+            else if(!password_verify($password, $data['password'])){
+                array_push($errors, 'Wrong Password!');
+            }
+        }
+
+        if(count($errors)!=0){
+            $session = session();
+            $session->setFlashdata('form', $_REQUEST);
+            $session->setFlashdata('error', '<ul class="list-disc pl-5"><li>'.implode('</li><li>', $errors).'</li></ul>');
+
             return redirect()->to('/users/login');
         }
+
+        $data['logged_in'] = TRUE;
+        $session->set($data);
+        return redirect()->to('/');
     }
 
     public function logout()
@@ -81,31 +93,47 @@ class Users extends BaseController
             return 0;
         }
 
-        $rules = [
-            'email' => 'required|min_length[3]|max_length[50]|valid_email|is_unique[users.email]',
-            'password' => 'required|min_length[8]|max_length[200]',
-            'confpassword' => 'matches[password]',
-            'first_name' => 'required|min_length[3]|max_length[20]',
-            'middle_name' => 'required|min_length[3]|max_length[20]',
-            'last_name' => 'required|min_length[3]|max_length[20]',
-        ];
+        $errors = [];
 
-        if ($this->validate($rules)) {
-            $model = new UserModel();
-            $data = [
-                'email' => $this->request->getVar('email'),
-                'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
-                'first_name' => $this->request->getVar('first_name'),
-                'middle_name' => $this->request->getVar('middle_name'),
-                'last_name' => $this->request->getVar('last_name'),
-                'is_admin' => false,
-                'is_active' => false,
-            ];
-            $model->save($data);
-            return redirect()->to('/users/login');
-        } else {
-            $data['validation'] = $this->validator;
-            echo view('/users/register', $data);
+        if($this->request->getVar('email')==''){
+            array_push($errors, 'Email should not be empty!');
         }
+        if($this->request->getVar('password')==''){
+            array_push($errors, 'Password should not be empty!');
+        }
+        if($this->request->getVar('first_name')==''){
+            array_push($errors, 'First name should not be empty!');
+        }
+        if($this->request->getVar('middle_name')==''){
+            array_push($errors, 'Middle name should not be empty!');
+        }
+        if($this->request->getVar('last_name')==''){
+            array_push($errors, 'Last name should not be empty!');
+        }
+        if($this->request->getVar('confirm_passowrd')!=$this->request->getVar('passowrd')){
+            array_push($errors, 'Password do not match should not be empty!');
+        }
+
+        if(count($errors)!=0){
+            $session = session();
+            $session->setFlashdata('form', $_REQUEST);
+            $session->setFlashdata('error', '<ul class="list-disc pl-5"><li>'.implode('</li><li>', $errors).'</li></ul>');
+
+            return redirect()->to('/users/register');
+        }
+
+
+        $model = new UserModel();
+        $data = [
+            'email' => $this->request->getVar('email'),
+            'password' => password_hash($this->request->getVar('password'), PASSWORD_DEFAULT),
+            'first_name' => $this->request->getVar('first_name'),
+            'middle_name' => $this->request->getVar('middle_name'),
+            'last_name' => $this->request->getVar('last_name'),
+            'is_admin' => false,
+            'is_active' => false,
+        ];
+        $model->save($data);
+        return redirect()->to('/users/login');
     }
 }

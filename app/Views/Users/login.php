@@ -1,9 +1,10 @@
 <?php
 $form = session()->getFlashdata('form');
-$email = '';
 
-if($form){
-    $email = isset($form['email']) ? $form['email'] : '';
+$form = isset($form) ? $form : [];
+
+foreach(['email'] as $formKey){
+    if(!isset($form[$formKey])) $form[$formKey] = '';
 }
 ?>
 
@@ -31,7 +32,7 @@ if($form){
                 </h2>
                 <div class="intro-x mt-8">
                     <input type="email" name="email" class="w-full intro-x login__input input input--lg border border-gray-300 block"
-                           placeholder="Email" value="<?= $email ?>">
+                           placeholder="Email" value="<?= $form['email'] ?>">
                     <input type="password" name="password"
                            class="w-full intro-x login__input input input--lg border border-gray-300 block mt-4"
                            placeholder="Password">
