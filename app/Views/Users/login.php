@@ -1,41 +1,86 @@
+<?php
+$form = session()->getFlashdata('form');
+$email = '';
+
+if($form){
+    $email = isset($form['email']) ? $form['email'] : '';
+}
+?>
+
 <!doctype html>
-<html lang="en">
+<html lang="en" class="bg-white">
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css" integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+    <link rel="stylesheet" href="/css/app.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"/>
 
     <title>Login</title>
 </head>
-<body>
-<div class="container">
-    <div class="row justify-content-md-center">
+<body class="p-0">
 
-        <div class="col-6">
-            <h1>Sign In</h1>
-            <?php if(session()->getFlashdata('msg')):?>
-                <div class="alert alert-danger"><?= session()->getFlashdata('msg') ?></div>
-            <?php endif;?>
+<div class="container h-screen flex flex-col justify-center">
+    <div class="px-5">
+        <div class="bg-white w-full sm:w-3/4 md:w-2/3 lg:w-1/2 xl:w-1/3 mx-auto p-5 border-solid border-2 shadow-md rounded-lg
+
+">
             <form method="post">
-                <div class="mb-3">
-                    <label for="InputForEmail" class="form-label">Email address</label>
-                    <input type="email" name="email" class="form-control" id="InputForEmail" value="<?= set_value('email') ?>">
+                <h2 class="intro-x font-bold text-3xl text-center">
+                    Login to Collab
+                </h2>
+                <div class="intro-x mt-8">
+                    <input type="email" name="email" class="w-full intro-x login__input input input--lg border border-gray-300 block"
+                           placeholder="Email" value="<?= $email ?>">
+                    <input type="password" name="password"
+                           class="w-full intro-x login__input input input--lg border border-gray-300 block mt-4"
+                           placeholder="Password">
                 </div>
-                <div class="mb-3">
-                    <label for="InputForPassword" class="form-label">Password</label>
-                    <input type="password" name="password" class="form-control" id="InputForPassword">
+
+                <div class="intro-x mt-5 xl:mt-8 text-center xl:text-left flex justify-center ">
+                    <a href="/users/register" class="button button--lg w-full xl:w-32 text-white text-gray-700 border border-gray-300 xl:mr-3 align-top">
+                        Register
+                    </a>
+                    <button type="submit" class="button button--lg w-full xl:w-32 text-white bg-theme-1 xl:mr-3 align-top">
+                        Login
+                    </button>
+
                 </div>
-                <button type="submit" class="btn btn-primary">Login</button>
             </form>
         </div>
-
     </div>
 </div>
 
-<!-- Popper.js first, then Bootstrap JS -->
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js" integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/" crossorigin="anonymous"></script>
+<script src="/js/app.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/1e4ad29514.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" crossorigin="anonymous"></script>
+<script>
+    $(function () {
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+
+        <?php if(session()->getFlashdata('error')): ?>
+        toastr.error('<?= session()->getFlashdata('error') ?>');
+        <?php endif; ?>
+    });
+</script>
 </body>
 </html>

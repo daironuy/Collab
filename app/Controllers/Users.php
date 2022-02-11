@@ -37,10 +37,13 @@ class Users extends BaseController
             return 0;
         }
 
+
+
         $session = session();
         $model = new UserModel();
         $email = $this->request->getVar('email');
         $password = $this->request->getVar('password');
+
         $data = $model->where('email', $email)->first();
         if ($data) {
             $pass = $data['password'];
@@ -50,11 +53,13 @@ class Users extends BaseController
                 $session->set($data);
                 return redirect()->to('/');
             } else {
-                $session->setFlashdata('msg', 'Wrong Password');
+                $session->setFlashdata('form', ['email'=>$email]);
+                $session->setFlashdata('error', 'Wrong Password!');
                 return redirect()->to('/users/login');
             }
         } else {
-            $session->setFlashdata('msg', 'Email not Found');
+            $session->setFlashdata('form', ['email'=>$email]);
+            $session->setFlashdata('error', 'Email not Found');
             return redirect()->to('/users/login');
         }
     }
