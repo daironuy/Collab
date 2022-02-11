@@ -31,6 +31,10 @@ class Users extends BaseController
 
     public function login()
     {
+        if(session()->get('auth')){
+            return redirect()->to('/');
+        }
+
         if (count($_POST) == 0) {
             echo view('users/login');
             return 0;
@@ -112,6 +116,10 @@ class Users extends BaseController
 
     public function register()
     {
+        if(session()->get('auth')){
+            return redirect()->to('/');
+        }
+
         if (count($_POST) == 0) {
             $data = [];
             echo view('users/register', $data);
@@ -163,6 +171,15 @@ class Users extends BaseController
     }
 
     public function verify(){
+        if (!session()->get('auth')) {
+            return redirect()->to('/users/login');
+        }
+
+        if(session()->get('loginSecurityKey')['is_verified']) {
+            return redirect()->to('/');
+        }
+
+
         if (count($_POST) == 0) {
             echo view('users/verify');
             return 0;
