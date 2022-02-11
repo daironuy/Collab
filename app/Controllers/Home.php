@@ -2,45 +2,24 @@
 
 namespace App\Controllers;
 
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
+
 class Home extends BaseController
 {
+    public function __construct()
+    {
+
+    }
+
     public function index(){
         $session = session();
 
-        $this->pr($session->get());
-
-        echo "Welcome back, ".$session->get('name');
-    }
-
-    public function showAllUser()
-    {
-        $userModel = new \App\Models\UserModel();
-
-        $users = $userModel->findAll();
-
-        foreach ($users as &$user){
-            $user['test'] = password_verify('12345s6', $user['password']);
-        }
-
-        $this->pr($users);
-
-        return view('Home/index');
-    }
-
-    public function insertUser(){
-        $userModel = new \App\Models\UserModel();
-
         $data = [
-            'email' => 'toledana.ian@gmail.com',
-            'password' => password_hash('123456', PASSWORD_DEFAULT ),
-            'fname' => 'Christian',
-            'mname' => 'Barola',
-            'lname' => 'Toledana',
-            'status' => 0,
+            'auth'=>$session->get()
         ];
 
-        $userModel->insert($data);
-
-        echo 'pasok';
+        return view('Home/index', $data);
     }
 }

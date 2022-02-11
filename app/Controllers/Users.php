@@ -4,12 +4,29 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\UserModel;
+use CodeIgniter\HTTP\RequestInterface;
+use CodeIgniter\HTTP\ResponseInterface;
+use Psr\Log\LoggerInterface;
 
 class Users extends BaseController
 {
+    public function __construct()
+    {
+        $action = str_replace('/users/', '', current_url(true)->getPath());
+
+        if(in_array($action, ['login', 'register'])){
+            $session = session();
+            $this->pr($session->get('id'));
+            if($session->get('id')!=''){
+                echo 'pasok';
+                return redirect()->to('/');
+            }
+        }
+    }
+
     public function index()
     {
-        //
+
     }
 
     public function login()

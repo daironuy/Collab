@@ -8,6 +8,7 @@
     <title>MSEUF Collab</title>
     <!-- BEGIN: CSS Assets-->
     <link rel="stylesheet" href="css/app.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"/>
     <!-- END: CSS Assets-->
 </head>
 <!-- END: Head -->
@@ -27,6 +28,23 @@
                     <div class="side-menu__title"> Dashboard</div>
                 </a>
             </li>
+
+            <?php if($auth['is_admin']){ ?>
+            <li>
+                <a href="#" class="side-menu">
+                    <div class="side-menu__icon"><i class="fa-solid fa-user"></i></div>
+                    <div class="side-menu__title"> Users</div>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="side-menu">
+                    <div class="side-menu__icon"><i class="fa-solid fa-building"></i></div>
+                    <div class="side-menu__title"> Departments</div>
+                </a>
+            </li>
+
+            <?php } else { ?>
+
             <li>
                 <a href="#" class="side-menu">
                     <div class="side-menu__icon"><i class="fa-solid fa-message"></i></div>
@@ -45,6 +63,9 @@
                     <div class="side-menu__title"> Department Files</div>
                 </a>
             </li>
+
+            <?php } ?>
+
         </ul>
     </nav>
     <!-- END: Side Menu -->
@@ -67,27 +88,16 @@
                 <div class="dropdown-box w-56">
                     <div class="dropdown-box__content box bg-theme-38 dark:bg-dark-6 text-white">
                         <div class="p-4 border-b border-theme-40 dark:border-dark-3">
-                            <div class="font-medium">John Travolta</div>
-                            <div class="text-xs text-theme-41 dark:text-gray-600">DevOps Engineer</div>
-                        </div>
-                        <div class="p-2">
-                            <a href=""
-                               class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md">
-                                <i data-feather="user" class="w-4 h-4 mr-2"></i> Profile </a>
-                            <a href=""
-                               class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md">
-                                <i data-feather="edit" class="w-4 h-4 mr-2"></i> Add Account </a>
-                            <a href=""
-                               class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md">
-                                <i data-feather="lock" class="w-4 h-4 mr-2"></i> Reset Password </a>
-                            <a href=""
-                               class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md">
-                                <i data-feather="help-circle" class="w-4 h-4 mr-2"></i> Help </a>
+                            <div class="font-medium"><?php echo $auth['first_name'].' '.$auth['last_name'] ?></div>
+                            <div class="text-xs text-theme-41 dark:text-gray-600">Department here</div>
                         </div>
                         <div class="p-2 border-t border-theme-40 dark:border-dark-3">
                             <a href=""
                                class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md">
-                                <i data-feather="toggle-right" class="w-4 h-4 mr-2"></i> Logout </a>
+                                <i class="fa-solid fa-key w-4 h-4 mr-2"></i> Change Password </a>
+                            <a href="/users/logout"
+                               class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md">
+                                <i class="fa-solid fa-arrow-right-from-bracket w-4 h-4 mr-2"></i> Logout </a>
                         </div>
                     </div>
                 </div>
@@ -103,7 +113,32 @@
 </div>
 <!-- BEGIN: JS Assets-->
 <script src="js/app.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+        crossorigin="anonymous"></script>
 <script src="https://kit.fontawesome.com/1e4ad29514.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" crossorigin="anonymous"></script>
+<script>
+    $(function(){
+        toastr.options = {
+            "closeButton": true,
+            "debug": false,
+            "newestOnTop": true,
+            "progressBar": true,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": "5000",
+            "extendedTimeOut": "1000",
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut"
+        }
+    });
+</script>
 <!-- END: JS Assets-->
 </body>
 </html>
