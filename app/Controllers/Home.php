@@ -20,6 +20,9 @@ class Home extends BaseController
             'auth'=>$session->get('auth')
         ];
 
+        pr($session->get('loginSecurityKey'));
+        pr($session->get('loginSecurityKey')['is_verified']=='');
+
         return view('Home/index', $data);
     }
 }

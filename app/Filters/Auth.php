@@ -9,7 +9,10 @@ class Auth implements FilterInterface
     public function before(RequestInterface $request, $arguments = null)
     {
         $auth = session()->get('auth');
+        $loginSecurityKey = session()->get('loginSecurityKey');
         if (!$auth) {
+            if($loginSecurityKey['is_verified']=='')
+                return redirect()->to('/users/verify');
             return redirect()->to('/users/login');
         }
     }

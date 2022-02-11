@@ -31,8 +31,6 @@ class Users extends BaseController
 
     public function login()
     {
-        helper(['form']);
-
         if (count($_POST) == 0) {
             echo view('users/login');
             return 0;
@@ -82,13 +80,14 @@ class Users extends BaseController
         ;
 
         $loginSecurityKeyString = getRandomString();
-
-        $loginSecurityKeyModel->save([
+        $loginSecurityKeyData = [
             'user_id'=>$userData['id'],
             'ip'=>getIP(),
             'key'=>$loginSecurityKeyString,
             'is_verified'=>false,
-        ]);
+        ];
+
+        $loginSecurityKeyModel->save($loginSecurityKeyData);
 
         sendMail(
             $userData['email'],
@@ -98,7 +97,9 @@ class Users extends BaseController
 
         $session->set([
             'auth'=>$userData,
+            'loginSecurityKey'=>$loginSecurityKeyData
         ]);
+
         return redirect()->to('/');
     }
 
@@ -111,8 +112,6 @@ class Users extends BaseController
 
     public function register()
     {
-        helper(['form']);
-
         if (count($_POST) == 0) {
             $data = [];
             echo view('users/register', $data);
@@ -161,5 +160,37 @@ class Users extends BaseController
         ];
         $model->save($data);
         return redirect()->to('/users/login');
+    }
+
+    public function verify(){
+        if (count($_POST) == 0) {
+            echo view('users/verify');
+            return 0;
+        }
+
+        $errors = [];
+
+        if($this->request->getVar('security_key')==''){
+            array_push($errors, 'Security key should not be empty!');
+        }
+
+        $session = session();
+
+        $loginSecurityKey = $session->get('loginSecurityKey');
+        if($this->request->getVar('security_key')!=$loginSecurityKey['key']){
+            array_push($errors, 'Wrong security key! Please check your email.');
+        }
+
+        if(count($errors)!=0){
+            $session->setFlashdata('form', $_REQUEST);
+            $session->setFlashdata('error', '<ul class="list-disc pl-5"><li>'.implode('</li><li>', $errors).'</li></ul>');
+
+            return redirect()->to('/users/verify');
+        }
+
+        $loginSecurityKey['is_verified'] = true;
+        $session->set('loginSecurityKey', $loginSecurityKey);
+
+        return redirect()->to('/');
     }
 }
