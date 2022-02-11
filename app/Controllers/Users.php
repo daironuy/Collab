@@ -12,16 +12,15 @@ class Users extends BaseController
 {
     public function __construct()
     {
-        $action = str_replace('/users/', '', current_url(true)->getPath());
-
-        if(in_array($action, ['login', 'register'])){
-            $session = session();
-            $this->pr($session->get('id'));
-            if($session->get('id')!=''){
-                echo 'pasok';
-                return redirect()->to('/');
-            }
-        }
+//        $action = str_replace('/users/', '', current_url(true)->getPath());
+//
+//        if(in_array($action, ['login', 'register'])){
+//            $session = session();
+//            if($session->get('id')!=''){
+//                echo 'pasok';
+//                return redirect()->to('/');
+//            }
+//        }
     }
 
     public function index()
