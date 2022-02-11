@@ -20,9 +20,16 @@ class CreateLoginSecurityKeys extends Migration
                 'constraint' => 11,
                 'unsigned' => true,
             ],
+            'ip' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255',
+            ],
             'key' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',
+            ],
+            'is_verified' => [
+                'type' => 'BOOLEAN',
             ],
             'created_at' => [
                 'type' => 'DATETIME',

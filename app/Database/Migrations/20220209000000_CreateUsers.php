@@ -39,8 +39,7 @@ class CreateUsers extends Migration
                 'type' => 'BOOLEAN',
             ],
             'is_active' => [
-                'type' => 'INT',
-                'constraint' => 11,
+                'type' => 'BOOLEAN',
             ],
             'created_at' => [
                 'type' => 'DATETIME',
