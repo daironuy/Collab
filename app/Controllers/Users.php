@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\LoginSecurityKeyModel;
 use App\Models\UserModel;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -47,20 +48,20 @@ class Users extends BaseController
         }
 
         $session = session();
-        $model = new UserModel();
+        $userModel = new UserModel();
         $email = $this->request->getVar('email');
         $password = $this->request->getVar('password');
-        $data = [];
+        $userData = [];
 
         if(count($errors)==0){
-            $data = $model->where('email', $email)->first();
+            $userData = $userModel->where('email', $email)->first();
 
-            if(!$data){
+            if(!$userData){
                 array_push($errors, 'Account does not exsist!');
             }
-            else if(!password_verify($password, $data['password'])){
+            else if(!password_verify($password, $userData['password'])){
                 array_push($errors, 'Wrong Password!');
-            } else if($data['is_active']==0){
+            } else if($userData['is_active']==0){
                 array_push($errors, 'Please wait for admin to verify your account!');
             }
         }
@@ -72,7 +73,32 @@ class Users extends BaseController
             return redirect()->to('/users/login');
         }
 
-        $session->set(['auth'=>$data]);
+        $loginSecurityKeyModel = new LoginSecurityKeyModel();
+
+        $loginSecurityKeyModel
+            ->where('user_id', $userData['id'])
+            ->where('ip', getIP())
+            ->delete()
+        ;
+
+        $loginSecurityKeyString = getRandomString();
+
+        $loginSecurityKeyModel->save([
+            'user_id'=>$userData['id'],
+            'ip'=>getIP(),
+            'key'=>$loginSecurityKeyString,
+            'is_verified'=>false,
+        ]);
+
+        sendMail(
+            $userData['email'],
+            'Verify your login',
+            'Your verification key is '.$loginSecurityKeyString
+        );
+
+        $session->set([
+            'auth'=>$userData,
+        ]);
         return redirect()->to('/');
     }
 

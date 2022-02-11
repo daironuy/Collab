@@ -4,10 +4,10 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class UserModel extends Model
+class LoginSecurityKeyModel extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'users';
+    protected $table            = 'login_security_keys';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $insertID         = 0;
@@ -15,13 +15,10 @@ class UserModel extends Model
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'email',
-        'password',
-        'first_name',
-        'middle_name',
-        'last_name',
-        'is_admin',
-        'is_active'
+        'user_id',
+        'ip',
+        'key',
+        'is_verified',
     ];
 
     // Dates
