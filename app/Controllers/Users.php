@@ -78,26 +78,33 @@ class Users extends BaseController
         $loginSecurityKeyModel = new LoginSecurityKeyModel();
 
         $loginSecurityKeyModel
-            ->where('user_id', $userData['id'])
-            ->where('ip', getIP())
+            ->where('created_at <= date_add(NOW(), INTERVAL -30 MINUTE)')
             ->delete()
         ;
 
-        $loginSecurityKeyString = getRandomString();
-        $loginSecurityKeyData = [
-            'user_id'=>$userData['id'],
-            'ip'=>getIP(),
-            'key'=>$loginSecurityKeyString,
-            'is_verified'=>false,
-        ];
+        $loginSecurityKeyData = $loginSecurityKeyModel
+            ->where('user_id', $userData['id'])
+            ->where('ip', getIP())
+            ->first()
+        ;
 
-        $loginSecurityKeyModel->save($loginSecurityKeyData);
+        if(!$loginSecurityKeyData){
+            $loginSecurityKeyString = getRandomString();
+            $loginSecurityKeyData = [
+                'user_id'=>$userData['id'],
+                'ip'=>getIP(),
+                'key'=>$loginSecurityKeyString,
+                'is_verified'=>false,
+            ];
 
-        sendMail(
-            $userData['email'],
-            'Verify your login',
-            'Your verification key is '.$loginSecurityKeyString
-        );
+            $loginSecurityKeyModel->save($loginSecurityKeyData);
+            $loginSecurityKeyData['id'] = $loginSecurityKeyModel->getInsertID();
+            sendMail(
+                $userData['email'],
+                'Verify your login',
+                'Your verification key is '.$loginSecurityKeyString
+            );
+        }
 
         $session->set([
             'auth'=>$userData,
@@ -175,10 +182,11 @@ class Users extends BaseController
             return redirect()->to('/users/login');
         }
 
+
+
         if(session()->get('loginSecurityKey')['is_verified']) {
             return redirect()->to('/');
         }
-
 
         if (count($_POST) == 0) {
             echo view('users/verify');
@@ -191,22 +199,26 @@ class Users extends BaseController
             array_push($errors, 'Security key should not be empty!');
         }
 
-        $session = session();
-
-        $loginSecurityKey = $session->get('loginSecurityKey');
+        $loginSecurityKey = session()->get('loginSecurityKey');
         if($this->request->getVar('security_key')!=$loginSecurityKey['key']){
             array_push($errors, 'Wrong security key! Please check your email.');
         }
 
         if(count($errors)!=0){
-            $session->setFlashdata('form', $_REQUEST);
-            $session->setFlashdata('error', '<ul class="list-disc pl-5"><li>'.implode('</li><li>', $errors).'</li></ul>');
+            session()->setFlashdata('form', $_REQUEST);
+            session()->setFlashdata('error', '<ul class="list-disc pl-5"><li>'.implode('</li><li>', $errors).'</li></ul>');
 
             return redirect()->to('/users/verify');
         }
 
         $loginSecurityKey['is_verified'] = true;
-        $session->set('loginSecurityKey', $loginSecurityKey);
+
+        $loginSecurityKeyModel = new LoginSecurityKeyModel();
+        $loginSecurityKeyModel
+            ->update($loginSecurityKey['id'], $loginSecurityKey)
+        ;
+
+        session()->set('loginSecurityKey', $loginSecurityKey);
 
         return redirect()->to('/');
     }
