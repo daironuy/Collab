@@ -141,7 +141,24 @@ $activeMenu = explode('/', uri_string())[0];
             "showMethod": "fadeIn",
             "hideMethod": "fadeOut"
         }
+
+        <?php if(session()->getFlashdata('error')): ?>
+        toastr.error('<?= session()->getFlashdata('error') ?>');
+        <?php endif; ?>
+
+        <?php if(session()->getFlashdata('success')): ?>
+        toastr.success('<?= session()->getFlashdata('success') ?>');
+        <?php endif; ?>
     });
+
+    function linkConfirm(message, url){
+        var confirm = window.confirm(message);
+        if(confirm){
+            window.location.href = url;
+        }
+
+        return false;
+    }
 </script>
 <!-- END: JS Assets-->
 </body>

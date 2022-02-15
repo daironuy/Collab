@@ -26,7 +26,62 @@ class Users extends BaseController
 
     public function index()
     {
-        return view('Users/index');
+        $userModel = new UserModel();
+
+        return view('Users/index', [
+            'users' => $userModel->findAll()
+        ]);
+    }
+
+    public function activate($newValue, $userId){
+        if(!session()->get('auth')['is_admin']){
+            session()->setFlashdata('error', 'You are not administrator!');
+            return redirect()->to('/users');
+        }
+
+        $userModel = new UserModel();
+        $userData = $userModel->where('id', $userId)->first();
+
+        if(!$userData){
+            session()->setFlashdata('error', 'Unknown user!');
+            return redirect()->to('/users');
+        }
+
+        $userModel = new UserModel();
+        $userModel
+            ->set('is_active', $newValue)
+            ->where('id', $userId)
+            ->update()
+        ;
+
+        session()->setFlashdata('success', 'Successfully '.($newValue?'activated': 'deactivated').' '.$userData['email'].'!');
+
+        return redirect()->to('/users');
+    }
+
+    public function delete($userId){
+        if(!session()->get('auth')['is_admin']){
+            session()->setFlashdata('error', 'You are not administrator!');
+            return redirect()->to('/users');
+        }
+
+        $userModel = new UserModel();
+        $userData = $userModel->where('id', $userId)->first();
+
+        if(!$userData){
+            session()->setFlashdata('error', 'Unknown user!');
+            return redirect()->to('/users');
+        }
+
+        $userModel = new UserModel();
+        $userModel
+            ->where('id', $userId)
+            ->delete()
+        ;
+
+        session()->setFlashdata('success', 'Successfully deleted '.$userData['email'].'!');
+
+        return redirect()->to('/users');
     }
 
     public function login()
