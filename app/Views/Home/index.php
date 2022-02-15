@@ -24,6 +24,6 @@ function getMessage()
 
 <?= $this->section('content') ?>
     <div class="pt-2">
-        <div class="text-xl font-bold"><?= getMessage() . ' ' . $auth['first_name']; ?> !</div>
+        <div class="text-xl font-bold"><?= getMessage() . ' ' . session()->get('auth')['first_name']; ?> !</div>
     </div>
 <?= $this->endSection() ?>

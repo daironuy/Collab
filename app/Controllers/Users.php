@@ -26,7 +26,7 @@ class Users extends BaseController
 
     public function index()
     {
-
+        return view('Users/index');
     }
 
     public function login()
@@ -221,5 +221,9 @@ class Users extends BaseController
         session()->set('loginSecurityKey', $loginSecurityKey);
 
         return redirect()->to('/');
+    }
+
+    public function test(){
+        return view('Users/index');
     }
 }

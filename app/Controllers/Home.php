@@ -14,15 +14,6 @@ class Home extends BaseController
     }
 
     public function index(){
-        $session = session();
-
-        $data = [
-            'auth'=>$session->get('auth')
-        ];
-
-        pr($session->get('loginSecurityKey'));
-        pr($session->get('loginSecurityKey')['is_verified']=='');
-
-        return view('Home/index', $data);
+        return view('Home/index');
     }
 }
