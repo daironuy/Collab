@@ -1,7 +1,6 @@
-
 <!--                <div class="mb-3">-->
 <!--                    <label for="InputForEmail" class="form-label">Email address</label>-->
-<!--                    <input type="email" name="email" class="form-control" id="InputForEmail" value="--><?//= set_value('email') ?><!--">-->
+<!--                    <input type="email" name="email" class="form-control" id="InputForEmail" value="--><? //= set_value('email') ?><!--">-->
 <!--                </div>-->
 <!---->
 <!--                <div class="mb-3">-->
@@ -15,15 +14,15 @@
 <!---->
 <!--                <div class="mb-3">-->
 <!--                    <label for="InputForName" class="form-label">First Name</label>-->
-<!--                    <input type="text" name="first_name" class="form-control" id="InputForName" value="--><?//= set_value('first_name') ?><!--">-->
+<!--                    <input type="text" name="first_name" class="form-control" id="InputForName" value="--><? //= set_value('first_name') ?><!--">-->
 <!--                </div>-->
 <!--                <div class="mb-3">-->
 <!--                    <label for="InputForName" class="form-label">Middle Name</label>-->
-<!--                    <input type="text" name="middle_name" class="form-control" id="InputForName" value="--><?//= set_value('middle_name') ?><!--">-->
+<!--                    <input type="text" name="middle_name" class="form-control" id="InputForName" value="--><? //= set_value('middle_name') ?><!--">-->
 <!--                </div>-->
 <!--                <div class="mb-3">-->
 <!--                    <label for="InputForName" class="form-label">Last Name</label>-->
-<!--                    <input type="text" name="last_name" class="form-control" id="InputForName" value="--><?//= set_value('last_name') ?><!--">-->
+<!--                    <input type="text" name="last_name" class="form-control" id="InputForName" value="--><? //= set_value('last_name') ?><!--">-->
 <!--                </div>-->
 <!---->
 <!--                <button type="submit" class="btn btn-primary">Register</button>-->
@@ -32,8 +31,8 @@ $form = session()->getFlashdata('form');
 
 $form = isset($form) ? $form : [];
 
-foreach(['email', 'first_name', 'middle_name', 'last_name'] as $formKey){
-    if(!isset($form[$formKey])) $form[$formKey] = '';
+foreach (['email', 'first_name', 'middle_name', 'last_name'] as $formKey) {
+    if (!isset($form[$formKey])) $form[$formKey] = '';
 }
 ?>
 
@@ -60,7 +59,8 @@ foreach(['email', 'first_name', 'middle_name', 'last_name'] as $formKey){
                     Login to Collab
                 </h2>
                 <div class="intro-x mt-8">
-                    <input type="email" name="email" class="w-full intro-x login__input input input--lg border border-gray-300 block"
+                    <input type="email" name="email"
+                           class="w-full intro-x login__input input input--lg border border-gray-300 block"
                            placeholder="Email" value="<?= $form['email'] ?>">
                     <input type="password" name="password"
                            class="w-full intro-x login__input input input--lg border border-gray-300 block mt-4"
@@ -68,19 +68,30 @@ foreach(['email', 'first_name', 'middle_name', 'last_name'] as $formKey){
                     <input type="password" name="confirm_password"
                            class="w-full intro-x login__input input input--lg border border-gray-300 block mt-4"
                            placeholder="Confirm Password">
-                    <input type="text" name="first_name" class="w-full intro-x login__input input input--lg border border-gray-300 block mt-4"
+                    <input type="text" name="first_name"
+                           class="w-full intro-x login__input input input--lg border border-gray-300 block mt-4"
                            placeholder="First Name" value="<?= $form['first_name'] ?>">
-                    <input type="text" name="middle_name" class="w-full intro-x login__input input input--lg border border-gray-300 block mt-4"
+                    <input type="text" name="middle_name"
+                           class="w-full intro-x login__input input input--lg border border-gray-300 block mt-4"
                            placeholder="Middle Name" value="<?= $form['middle_name'] ?>">
-                    <input type="text" name="last_name" class="w-full intro-x login__input input input--lg border border-gray-300 block mt-4"
+                    <input type="text" name="last_name"
+                           class="w-full intro-x login__input input input--lg border border-gray-300 block mt-4"
                            placeholder="Last Name" value="<?= $form['last_name'] ?>">
+
+                        <select name="department_id" class="form-select w-full intro-x login__input input input--lg border border-gray-300 block mt-4" aria-label="Department">
+                            <?php foreach($departments as $department){ ?>
+                                <option value="<?= $department['id'] ?>"><?= $department['name'] ?></option>
+                            <?php } ?>
+                        </select>
                 </div>
 
                 <div class="intro-x mt-5 xl:mt-8 text-center xl:text-left flex justify-center ">
-                    <a href="/users/login" class="button button--lg w-full xl:w-32 text-white text-gray-700 border border-gray-300 xl:mr-3 align-top">
+                    <a href="/users/login"
+                       class="button button--lg w-full xl:w-32 text-white text-gray-700 border border-gray-300 xl:mr-3 align-top">
                         Login
                     </a>
-                    <button type="submit" class="button button--lg w-full xl:w-32 text-white bg-theme-1 xl:mr-3 align-top">
+                    <button type="submit"
+                            class="button button--lg w-full xl:w-32 text-white bg-theme-1 xl:mr-3 align-top">
                         Register
                     </button>
 

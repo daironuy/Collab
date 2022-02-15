@@ -2,12 +2,9 @@
 
 namespace App\Controllers;
 
-use App\Controllers\BaseController;
+use App\Models\DepartmentModel;
 use App\Models\LoginSecurityKeyModel;
 use App\Models\UserModel;
-use CodeIgniter\HTTP\RequestInterface;
-use CodeIgniter\HTTP\ResponseInterface;
-use Psr\Log\LoggerInterface;
 
 class Users extends BaseController
 {
@@ -183,8 +180,9 @@ class Users extends BaseController
         }
 
         if (count($_POST) == 0) {
-            $data = [];
-            echo view('users/register', $data);
+            echo view('users/register', [
+                'departments' => (New DepartmentModel())->findAll()
+            ]);
             return 0;
         }
 

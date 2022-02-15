@@ -41,7 +41,7 @@ $activeMenu = explode('/', uri_string())[0];
                 </a>
             </li>
             <li>
-                <a href="#" class="side-menu <?= $activeMenu=='departments'?'side-menu--active':'' ?>"">
+                <a href="/departments" class="side-menu <?= $activeMenu=='departments'?'side-menu--active':'' ?>"">
                     <div class="side-menu__icon"><i class="fa-solid fa-building"></i></div>
                     <div class="side-menu__title"> Departments</div>
                 </a>

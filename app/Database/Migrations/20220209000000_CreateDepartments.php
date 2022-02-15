@@ -19,6 +19,10 @@ class CreateDepartments extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => '255',
             ],
+            'description' => [
+                'type' => 'VARCHAR',
+                'constraint' => '255',
+            ],
             'created_at' => [
                 'type' => 'DATETIME',
             ],

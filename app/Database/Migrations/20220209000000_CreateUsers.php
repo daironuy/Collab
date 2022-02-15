@@ -35,6 +35,11 @@ class CreateUsers extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => '255',
             ],
+            'department_id' => [
+                'type' => 'INT',
+                'constraint' => 11,
+                'unsigned' => true,
+            ],
             'is_admin' => [
                 'type' => 'BOOLEAN',
             ],
