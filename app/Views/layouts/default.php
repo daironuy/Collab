@@ -62,7 +62,7 @@ $activeMenu = explode('/', uri_string())[0];
                 </a>
             </li>
             <li>
-                <a href="#" class="side-menu <?= $activeMenu=='departmentFiles'?'side-menu--active':'' ?>"">
+                <a href="/departmentFiles/" class="side-menu <?= $activeMenu=='departmentFiles'?'side-menu--active':'' ?>"">
                     <div class="side-menu__icon"><i class="fa-solid fa-box-archive"></i></div>
                     <div class="side-menu__title"> Department Files</div>
                 </a>
@@ -78,9 +78,9 @@ $activeMenu = explode('/', uri_string())[0];
         <div class="top-bar">
             <!-- BEGIN: Breadcrumb -->
             <div class="-intro-x breadcrumb mr-auto flex">
-                <a href="" class="">Application</a>
+                <a href="#" class="">Application</a>
                 <span class="px-1">/</span>
-                <a href="" class="breadcrumb--active">Dashboard</a>
+                <a href="#" class="breadcrumb--active">Dashboard</a>
             </div>
             <!-- END: Breadcrumb -->
 
