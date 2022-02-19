@@ -33,7 +33,7 @@
                                     <td><?= $file['first_name'] . ' ' . $file['last_name'] ?></td>
                                     <td><?= date_format(date_create($file['created_at']), "Y/m/d h:i:s A") ?></td>
                                     <td class="flex gap-2">
-                                        <a href="#"
+                                        <a href="/departmentFiles/download/<?= $file['id'] ?>"
                                            class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded"
                                            target="_blank"
                                         >

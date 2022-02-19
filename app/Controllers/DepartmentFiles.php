@@ -49,12 +49,41 @@ class DepartmentFiles extends BaseController
             'upload_by_user_id'=>session()->get('auth')['id'],
             'file_name'=>$_FILES['file']['name'],
             'file_type'=>$_FILES['file']['type'],
-            'file_data'=>addslashes(file_get_contents($_FILES['file']['tmp_name'])),
+            'file_data'=>file_get_contents($_FILES['file']['tmp_name']),
         ];
 
         $departmentFilesModel = new DepartmentFilesModel();
         $departmentFilesModel->save($insertData);
 
         return redirect()->to('/departmentFiles');
+    }
+
+    public function download($id=0){
+        $departmentFileData = (New DepartmentFilesModel())
+            ->select('department_files.*')
+            ->join('users', 'users.id=department_files.upload_by_user_id', 'left')
+            ->join('departments', 'users.department_id=departments.id', 'left')
+            ->where('departments.id', session()->get('auth')['department_id'])
+            ->where('department_files.id', $id)
+            ->first()
+        ;
+
+        $errors = [];
+
+        if (!$departmentFileData) {
+            array_push($errors, 'You do not have file permission!');
+        }
+
+        if(count($errors)!=0){
+            session()->setFlashdata('error', '<ul class="list-disc pl-5"><li>'.implode('</li><li>', $errors).'</li></ul>');
+            return redirect()->to('/departmentFiles');
+        }
+
+//        header("Content-length: $size");
+        header("Content-type: ".$departmentFileData['file_type']);
+        header("Content-Disposition: attachment; filename=".$departmentFileData['file_name']);
+        ob_clean();
+        flush();
+        echo $departmentFileData['file_data'];
     }
 }
