@@ -20,6 +20,7 @@ class UserModel extends Model
         'first_name',
         'middle_name',
         'last_name',
+        'department_id',
         'is_admin',
         'is_active'
     ];

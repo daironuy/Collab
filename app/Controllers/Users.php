@@ -203,8 +203,16 @@ class Users extends BaseController
         if($this->request->getVar('last_name')==''){
             array_push($errors, 'Last name should not be empty!');
         }
-        if($this->request->getVar('confirm_passowrd')!=$this->request->getVar('passowrd')){
-            array_push($errors, 'Password do not match should not be empty!');
+        if($this->request->getVar('confirm_password')!=$this->request->getVar('password')){
+            array_push($errors, 'Password and Confirm Password do not match!');
+        }
+
+        if(count($errors)==0){
+            $userModel = new UserModel();
+            $userData = $userModel->where('email', $this->request->getVar('email'))->findAll();
+            if(count($userData)!=0){
+                array_push($errors, 'Email already exsist!');
+            }
         }
 
         if(count($errors)!=0){
@@ -223,6 +231,7 @@ class Users extends BaseController
             'first_name' => $this->request->getVar('first_name'),
             'middle_name' => $this->request->getVar('middle_name'),
             'last_name' => $this->request->getVar('last_name'),
+            'department_id' => $this->request->getVar('department_id'),
             'is_admin' => false,
             'is_active' => false,
         ];
