@@ -4,7 +4,7 @@
     <div class="pt-2">
         <div class="intro-y box xl:w-4/6">
             <div class="flex items-center p-5 border-b border-slate-200/60">
-                <h2 class="font-medium text-base mr-auto">Department Files</h2>
+                <h2 class="font-medium text-base mr-auto"><?= $department['name'] ?> Files</h2>
                 <a href="javascript:;" data-toggle="modal" data-target="#new_form"
                    class="button inline-block bg-green-500 text-white">
                     Upload
