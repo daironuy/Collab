@@ -21,7 +21,7 @@ class DepartmentFiles extends BaseController
                     ->select('department_files.*')
                     ->select('users.first_name')
                     ->select('users.last_name')
-                    ->select('CONCAT(ROUND(LENGTH(department_files.file_data)/1024, 1), \'k\') AS file_size')
+                    ->select('CONCAT(ROUND(LENGTH(department_files.file_data)/1024, 1), \' KB\') AS file_size')
                     ->join('users', 'users.id=department_files.upload_by_user_id', 'left')
                     ->join('departments', 'users.department_id=departments.id', 'left')
                     ->where('departments.id', $departmentData['id'])
@@ -38,6 +38,10 @@ class DepartmentFiles extends BaseController
 
         if (!is_uploaded_file($_FILES['file']['tmp_name'])) {
             array_push($errors, 'File is not from POST!');
+        }
+
+        if((filesize($_FILES['file']['tmp_name'])/1024) > 16000){
+            array_push($errors, 'File size is more than 16MB!');
         }
 
         if(count($errors)!=0){
@@ -79,11 +83,40 @@ class DepartmentFiles extends BaseController
             return redirect()->to('/departmentFiles');
         }
 
-//        header("Content-length: $size");
         header("Content-type: ".$departmentFileData['file_type']);
         header("Content-Disposition: attachment; filename=".$departmentFileData['file_name']);
         ob_clean();
         flush();
         echo $departmentFileData['file_data'];
+    }
+
+    public function delete($id=0){
+        $departmentFileData = (New DepartmentFilesModel())
+            ->select('department_files.*')
+            ->join('users', 'users.id=department_files.upload_by_user_id', 'left')
+            ->join('departments', 'users.department_id=departments.id', 'left')
+            ->where('departments.id', session()->get('auth')['department_id'])
+            ->where('department_files.id', $id)
+            ->first()
+        ;
+
+        $errors = [];
+
+        if (!$departmentFileData) {
+            array_push($errors, 'You do not have file permission!');
+        }
+
+        if(count($errors)!=0){
+            session()->setFlashdata('error', '<ul class="list-disc pl-5"><li>'.implode('</li><li>', $errors).'</li></ul>');
+            return redirect()->to('/departmentFiles');
+        }
+
+        (New DepartmentFilesModel())
+            ->where('id', $id)
+            ->delete()
+        ;
+
+        session()->setFlashdata('success', 'Successfully deleted '.$departmentFileData['file_name'].'!');
+        return redirect()->to('/departmentFiles');
     }
 }
