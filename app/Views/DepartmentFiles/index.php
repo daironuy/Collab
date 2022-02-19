@@ -20,20 +20,29 @@
                                 <th class="whitespace-nowrap">Name</th>
                                 <th class="whitespace-nowrap">File Size</th>
                                 <th class="whitespace-nowrap">Upload By</th>
+                                <th class="whitespace-nowrap">Upload Date</th>
                                 <th class="whitespace-nowrap">Action</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <?php foreach([['id'=>1, 'name'=>'Hello.zip', 'fileSize'=>'32kb', 'uploadBy'=>'Christian Toledana']] as $department){ ?>
+                            <?php foreach ($files as $file) { ?>
                                 <tr class="hover:bg-primary-100">
-                                    <td><?= $department['id'] ?></td>
-                                    <td><?= $department['name'] ?></td>
-                                    <td><?= $department['fileSize'] ?></td>
-                                    <td><?= $department['uploadBy'] ?></td>
-                                    <td>
+                                    <td><?= $file['id'] ?></td>
+                                    <td><?= $file['file_name'] ?></td>
+                                    <td><?= $file['file_size'] ?></td>
+                                    <td><?= $file['first_name'] . ' ' . $file['last_name'] ?></td>
+                                    <td><?= date_format(date_create($file['created_at']), "Y/m/d h:i:s A") ?></td>
+                                    <td class="flex gap-2">
+                                        <a href="#"
+                                           class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded"
+                                           target="_blank"
+                                        >
+                                            Download
+                                        </a>
+
                                         <a href="#"
                                            class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
-                                           onclick="linkConfirm('Are you sure you want to delete <?= $department['name'] ?>', '/departments/delete/<?= $department['id'] ?>')"
+                                           onclick="linkConfirm('Are you sure you want to delete <?= $file['file_name'] ?>', '/departmentFiles/delete/<?= $file['id'] ?>')"
                                         >
                                             Delete
                                         </a>

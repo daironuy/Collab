@@ -9,11 +9,23 @@ use App\Models\UserModel;
 class DepartmentFiles extends BaseController
 {
     public function index(){
+        $departmentData = (New DepartmentModel())
+            ->where('id', session()->get('auth')['department_id'])
+            ->first()
+        ;
+
         return view('DepartmentFiles/index', [
-            'department' =>
-                (New DepartmentModel())
-                    ->where('id', session()->get('auth')['department_id'])
-                    ->first()
+            'department' => $departmentData,
+            'files' =>
+                (New DepartmentFilesModel())
+                    ->select('department_files.*')
+                    ->select('users.first_name')
+                    ->select('users.last_name')
+                    ->select('CONCAT(ROUND(LENGTH(department_files.file_data)/1024, 1), \'k\') AS file_size')
+                    ->join('users', 'users.id=department_files.upload_by_user_id', 'left')
+                    ->join('departments', 'users.department_id=departments.id', 'left')
+                    ->where('departments.id', $departmentData['id'])
+                    ->findAll()
         ]);
     }
 
