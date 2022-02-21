@@ -31,14 +31,12 @@
 <?= $this->section('script') ?>
     <script type="text/babel">
 
-        const SideNav = () => {
-            const sideMenus = [
-                'Files Receive',
-                'Send Files to CSS',
-                'Send Files to Archi',
-            ];
+        const SideMenuContext = React.createContext(null);
 
-            const [activeSideMenu, setActiveSideMenu] = React.useState(sideMenus[0]);
+        const SideNav = () => {
+            const {
+                activeSideMenu, setActiveSideMenu, sideMenus
+            } = React.useContext(SideMenuContext)
 
             return (
                 <React.Fragment>
@@ -46,7 +44,7 @@
                         sideMenus.map((sideMenu) => {
                             return (
                                 <React.Fragment key={sideMenu}>
-                                    <div className="cursor-pointer box relative flex items-center p-5" onClick={()=>{
+                                    <div className="cursor-pointer box relative flex items-center p-5" onClick={() => {
                                         setActiveSideMenu(sideMenu);
                                     }}>
                                         <div className="ml-2 overflow-hidden">
@@ -65,19 +63,28 @@
         }
 
         const App = () => {
+            const sideMenus = [
+                'Files Receive',
+                'Send Files to CSS',
+                'Send Files to Archi',
+            ];
+            const [activeSideMenu, setActiveSideMenu] = React.useState(sideMenus[0]);
+
             return (
                 <React.Fragment>
-                    <div className="py-2">
-                        <div className="text-lg font-bold">File Sharing</div>
-                    </div>
-                    <div className="flex flex-row gap-4">
-                        <div className="w-1/4 flex flex-col gap-2">
-                            <SideNav/>
+                    <SideMenuContext.Provider value={{activeSideMenu, setActiveSideMenu, sideMenus}}>
+                        <div className="py-2">
+                            <div className="text-lg font-bold">File Sharing</div>
                         </div>
-                        <div className="bg-blue-300 rounded p-2 w-3/4">
-                            Content dito
+                        <div className="flex flex-row gap-4">
+                            <div className="w-1/4 flex flex-col gap-2">
+                                <SideNav/>
+                            </div>
+                            <div className="bg-blue-300 rounded p-2 w-3/4">
+                                {activeSideMenu}
+                            </div>
                         </div>
-                    </div>
+                    </SideMenuContext.Provider>
                 </React.Fragment>
             );
         }
