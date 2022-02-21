@@ -56,7 +56,7 @@ $activeMenu = explode('/', uri_string())[0];
                 </a>
             </li>
             <li>
-                <a href="#" class="side-menu <?= $activeMenu=='files'?'side-menu--active':'' ?>"">
+                <a href="/files" class="side-menu <?= $activeMenu=='files'?'side-menu--active':'' ?>"">
                     <div class="side-menu__icon"><i class="fa-solid fa-square-share-nodes"></i></div>
                     <div class="side-menu__title"> File Sharing</div>
                 </a>
@@ -109,7 +109,7 @@ $activeMenu = explode('/', uri_string())[0];
             <!-- END: Account Menu -->
         </div>
         <!-- END: Top Bar -->
-        <div class="">
+        <div id="AppRoot">
             <?= $this->renderSection('content') ?>
         </div>
     </div>
@@ -122,6 +122,9 @@ $activeMenu = explode('/', uri_string())[0];
         crossorigin="anonymous"></script>
 <script src="https://kit.fontawesome.com/1e4ad29514.js" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 <script>
     $(function(){
         toastr.options = {
@@ -160,6 +163,7 @@ $activeMenu = explode('/', uri_string())[0];
         return false;
     }
 </script>
+<?= $this->renderSection('script') ?>
 <!-- END: JS Assets-->
 </body>
 </html>
