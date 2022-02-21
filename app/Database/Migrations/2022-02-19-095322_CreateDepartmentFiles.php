@@ -20,6 +20,11 @@ class CreateDepartmentFiles extends Migration
                 'constraint' => 11,
                 'unsigned' => true,
             ],
+            'upload_to_department_id' => [
+                'type' => 'INT',
+                'constraint' => 11,
+                'unsigned' => true,
+            ],
             'file_name' => [
                 'type' => 'VARCHAR',
                 'constraint' => '255',

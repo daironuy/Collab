@@ -16,6 +16,7 @@ class DepartmentFilesModel extends Model
     protected $protectFields    = true;
     protected $allowedFields    = [
         'upload_by_user_id',
+        'upload_to_department_id',
         'file_name',
         'file_type',
         'file_data',

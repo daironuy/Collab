@@ -25,6 +25,7 @@ class DepartmentFiles extends BaseController
                     ->join('users', 'users.id=department_files.upload_by_user_id', 'left')
                     ->join('departments', 'users.department_id=departments.id', 'left')
                     ->where('departments.id', $departmentData['id'])
+                    ->where('upload_to_department_id', $departmentData['id'])
                     ->findAll()
         ]);
     }
@@ -51,6 +52,7 @@ class DepartmentFiles extends BaseController
 
         $insertData = [
             'upload_by_user_id'=>session()->get('auth')['id'],
+            'upload_to_department_id'=>session()->get('auth')['department_id'],
             'file_name'=>$_FILES['file']['name'],
             'file_type'=>$_FILES['file']['type'],
             'file_data'=>file_get_contents($_FILES['file']['tmp_name']),
