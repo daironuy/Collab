@@ -158,6 +158,11 @@ class Users extends BaseController
             );
         }
 
+        $userData['department'] = (new DepartmentModel())
+            ->where('id', $userData['department_id'])
+            ->first()
+        ;
+
         $session->set([
             'auth'=>$userData,
             'loginSecurityKey'=>$loginSecurityKeyData
