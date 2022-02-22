@@ -1,31 +1,7 @@
 <?= $this->extend('layouts/default') ?>
 
 <?= $this->section('content') ?>
-    <!--    <div class="py-2">-->
-    <!--        <div class="text-lg font-bold">File Sharing</div>-->
-    <!--    </div>-->
-    <!--    <div class="flex flex-row gap-4">-->
-    <!--        <div class="w-1/4 flex flex-col gap-2">-->
-    <!--            <div class="cursor-pointer box relative flex items-center p-5">-->
-    <!--                <div class="ml-2 overflow-hidden">-->
-    <!--                    <div class="flex items-center font-bold">-->
-    <!--                        Files Receive-->
-    <!--                    </div>-->
-    <!--                </div>-->
-    <!--            </div>-->
-    <!---->
-    <!--            <div class="cursor-pointer box relative flex items-center p-5">-->
-    <!--                <div class="ml-2 overflow-hidden">-->
-    <!--                    <div class="flex items-center font-normal">-->
-    <!--                        Send Files to CSS-->
-    <!--                    </div>-->
-    <!--                </div>-->
-    <!--            </div>-->
-    <!--        </div>-->
-    <!--        <div class="bg-blue-300 rounded p-2 w-3/4">-->
-    <!--            Content dito-->
-    <!--        </div>-->
-    <!--    </div>-->
+
 <?= $this->endSection() ?>
 
 <?= $this->section('script') ?>
@@ -40,17 +16,28 @@
 
             return (
                 <React.Fragment>
+                    <div className={
+                        "cursor-pointer box relative flex items-center p-5 " +
+                        (activeSideMenu != null ? 'hidden' : '')
+                    }>
+                        <div className="ml-2 overflow-hidden">
+                            <div className={"flex items-center font-bold"}>
+                                Loading. . .
+                            </div>
+                        </div>
+                    </div>
+
                     {
                         sideMenus.map((sideMenu) => {
                             return (
-                                <React.Fragment key={sideMenu}>
+                                <React.Fragment key={sideMenu.id}>
                                     <div className="cursor-pointer box relative flex items-center p-5" onClick={() => {
                                         setActiveSideMenu(sideMenu);
                                     }}>
                                         <div className="ml-2 overflow-hidden">
                                             <div
                                                 className={"flex items-center " + (activeSideMenu === sideMenu ? 'font-bold' : '')}>
-                                                {sideMenu}
+                                                {sideMenu.name}
                                             </div>
                                         </div>
                                     </div>
@@ -62,13 +49,114 @@
             );
         }
 
+        const Content = () => {
+            const {
+                activeSideMenu
+            } = React.useContext(SideMenuContext)
+
+            const [fileToUpload, setFileToUpload] = React.useState(null);
+            const [isModalOpen, setModalOpen] = React.useState(false);
+
+
+            return (
+                <React.Fragment>
+                    <div className="flex items-center p-2 border-b border-slate-200/60">
+                        <h2 className="font-medium text-base mr-auto">{activeSideMenu.name} Shared Files</h2>
+                        <button
+                            className="button inline-block bg-green-500 text-white"
+                            onClick={() => {
+                                setModalOpen(true);
+                            }}
+                        >
+                            Upload
+                        </button>
+                    </div>
+                    <div className="p-5" id="head-options-table">
+                        <div className="preview block">
+                            <div className="overflow-x-auto">
+                                <table className="table">
+                                    <thead className="table-dark bg-primary-900 text-white">
+                                    <tr>
+                                        <th className="whitespace-nowrap">ID</th>
+                                        <th className="whitespace-nowrap">Name</th>
+                                        <th className="whitespace-nowrap">File Size</th>
+                                        <th className="whitespace-nowrap">Upload By</th>
+                                        <th className="whitespace-nowrap">Upload Date</th>
+                                        <th className="whitespace-nowrap">Action</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        id="new_form"
+                        className={
+                            isModalOpen ?
+                                'absolute w-screen h-screen top-0 left-0 z-50' :
+                                'hidden'
+                        }
+                        style={{
+                            backgroundColor: 'rgba(45, 55, 72,.5)',
+                            transition: 'visibility 0s linear 0s, opacity .2 0s'
+                        }}
+                    >
+                        <div
+                            className={"bg-white mx-auto mt-16 rounded"}
+                            style={{width: '460px'}}
+                        >
+
+                            <div className="flex items-center px-5 py-5 sm:py-3 border-b border-gray-200">
+                                <h2 className="font-medium text-base mr-auto">Upload a file</h2>
+                            </div>
+                            <div className="p-5 grid grid-cols-12 gap-4 row-gap-3">
+                                <div className="col-span-12">
+                                    <label>Select file to upload</label>
+                                    <input name="file" type="file" className="input w-full border mt-2 flex-1"/>
+                                </div>
+                            </div>
+                            <div className="px-5 py-3 text-right border-t border-gray-200">
+                                <button
+                                    className="button w-20 border text-gray-700 mr-1"
+                                    onClick={() => {
+                                        setModalOpen(false)
+                                    }}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    className="button w-20 bg-green-500 text-white"
+                                    onClick={() => {
+                                        console.log('Gumagana pa!');
+                                    }}
+                                >
+                                    Upload
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </React.Fragment>
+            );
+        }
+
         const App = () => {
-            const sideMenus = [
-                'Files Receive',
-                'Send Files to CSS',
-                'Send Files to Archi',
-            ];
-            const [activeSideMenu, setActiveSideMenu] = React.useState(sideMenus[0]);
+            const [sideMenus, setSideMenus] = React.useState([]);
+            const [activeSideMenu, setActiveSideMenu] = React.useState({});
+
+            React.useEffect(() => {
+                fetch('/files/getOtherDepartments')
+                    .then(response => response.json())
+                    .then((data) => {
+                        setSideMenus(data);
+                        setActiveSideMenu(data[0]);
+                    });
+            }, []);
+
 
             return (
                 <React.Fragment>
@@ -80,8 +168,19 @@
                             <div className="w-1/4 flex flex-col gap-2">
                                 <SideNav/>
                             </div>
-                            <div className="bg-blue-300 rounded p-2 w-3/4">
-                                {activeSideMenu}
+                            <div className="bg-white rounded p-2 w-3/4">
+                                {
+                                    activeSideMenu == null ?
+                                        (
+                                            <div className="p-5 overflow-hidden">
+                                                <div className={"flex items-center font-bold"}>
+                                                    Loading. . .
+                                                </div>
+                                            </div>
+                                        )
+                                        :
+                                        <Content/>
+                                }
                             </div>
                         </div>
                     </SideMenuContext.Provider>

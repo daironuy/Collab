@@ -12,4 +12,14 @@ class Files extends BaseController
 
         ]);
     }
+
+    public function getOtherDepartments(){
+        $otherDepartments = (New DepartmentModel())
+            ->where('id!='.session()->get('auth')['department_id'])
+            ->findAll()
+        ;
+
+        echo json_encode($otherDepartments);
+        exit();
+    }
 }
