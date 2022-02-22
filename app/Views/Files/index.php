@@ -54,8 +54,25 @@
                 activeSideMenu
             } = React.useContext(SideMenuContext)
 
+            const [files, setFiles] = React.useState([]);
+
             const [isModalOpen, setModalOpen] = React.useState(false);
             const [fileToUpload, setFileToUpload] = React.useState(null);
+
+            React.useEffect(() => {
+                setFiles([]);
+                if(activeSideMenu==null){
+                    return 0;
+                }
+
+                fetch('/files/getFiles/'+activeSideMenu.id)
+                    .then(response => response.json())
+                    .then((data) => {
+                        console.log(data);
+                    });
+
+            }, [activeSideMenu]);
+
 
             return (
                 <React.Fragment>
@@ -169,14 +186,13 @@
                             </div>
                         </div>
                     </div>
-
                 </React.Fragment>
             );
         }
 
         const App = () => {
             const [sideMenus, setSideMenus] = React.useState([]);
-            const [activeSideMenu, setActiveSideMenu] = React.useState({});
+            const [activeSideMenu, setActiveSideMenu] = React.useState(null);
 
             React.useEffect(() => {
                 fetch('/files/getOtherDepartments')

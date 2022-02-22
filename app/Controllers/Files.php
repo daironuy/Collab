@@ -18,8 +18,16 @@ class Files extends BaseController
     public function getOtherDepartments()
     {
         $otherDepartments = (new DepartmentModel())
-            ->where('id!=' . session()->get('auth')['department_id'])
+            ->where('id=' . session()->get('auth')['department_id'])
             ->findAll();
+
+        $otherDepartments =
+            array_merge(
+                $otherDepartments,
+                (new DepartmentModel())
+                    ->where('id!=' . session()->get('auth')['department_id'])
+                    ->findAll()
+            );
 
         echo json_encode($otherDepartments);
         exit();
@@ -71,6 +79,41 @@ class Files extends BaseController
             'message' => '',
             'data' => []
         ]);
+        exit();
+    }
+
+    public function getFiles($departmentId)
+    {
+        $output = [];
+
+        if($departmentId==session()->get('auth')['department_id']){
+            $output = (new DepartmentFilesModel())
+                ->select('department_files.id, department_files.file_name, department_files.file_type, department_files.created_at')
+                ->select('uploader.first_name, uploader.last_name')
+                ->select('uploader_department.name as uploader_department_name')
+                ->select('CONCAT(ROUND(LENGTH(department_files.file_data)/1024, 1), \' KB\') AS file_size')
+                ->join('users as uploader', 'uploader.id=department_files.upload_by_user_id', 'left')
+                ->join('departments as uploader_department ', 'uploader_department.id=uploader.department_id', 'left')
+                ->where('uploader_department.id!=department_files.upload_to_department_id')
+                ->where('department_files.upload_to_department_id', $departmentId)
+                ->where('uploader_department.id!='. session()->get('auth')['department_id'])
+                ->findAll();
+        }
+        else {
+            $output = (new DepartmentFilesModel())
+                ->select('department_files.id, department_files.file_name, department_files.file_type, department_files.created_at')
+                ->select('uploader.first_name, uploader.last_name')
+                ->select('uploader_department.name as uploader_department_name')
+                ->select('CONCAT(ROUND(LENGTH(department_files.file_data)/1024, 1), \' KB\') AS file_size')
+                ->join('users as uploader', 'uploader.id=department_files.upload_by_user_id', 'left')
+                ->join('departments as uploader_department ', 'uploader_department.id=uploader.department_id', 'left')
+                ->where('uploader_department.id!=department_files.upload_to_department_id')
+                ->where('department_files.upload_to_department_id', $departmentId)
+                ->where('uploader_department.id', session()->get('auth')['department_id'])
+                ->findAll();
+        }
+
+        echo json_encode($output);
         exit();
     }
 
