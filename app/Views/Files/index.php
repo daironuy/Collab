@@ -68,7 +68,7 @@
                 fetch('/files/getFiles/'+activeSideMenu.id)
                     .then(response => response.json())
                     .then((data) => {
-                        console.log(data);
+                        setFiles(data);
                     });
 
             }, [activeSideMenu]);
@@ -102,7 +102,26 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-
+                                    {
+                                        files.map((file)=>{
+                                            return(
+                                                <tr key={file.id}>
+                                                    <td>{file.id}</td>
+                                                    <td>{file.file_name}</td>
+                                                    <td>{file.file_size}</td>
+                                                    <td>
+                                                        {
+                                                            file.first_name + ' '+
+                                                            file.last_name + ' ('+
+                                                            file.uploader_department_name + ')'
+                                                        }
+                                                    </td>
+                                                    <td>{file.created_at}</td>
+                                                    <td>{file.id}</td>
+                                                </tr>
+                                            );
+                                        })
+                                    }
                                     </tbody>
                                 </table>
                             </div>
