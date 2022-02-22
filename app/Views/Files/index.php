@@ -54,9 +54,8 @@
                 activeSideMenu
             } = React.useContext(SideMenuContext)
 
-            const [fileToUpload, setFileToUpload] = React.useState(null);
             const [isModalOpen, setModalOpen] = React.useState(false);
-
+            const [fileToUpload, setFileToUpload] = React.useState(null);
 
             return (
                 <React.Fragment>
@@ -116,22 +115,53 @@
                             <div className="p-5 grid grid-cols-12 gap-4 row-gap-3">
                                 <div className="col-span-12">
                                     <label>Select file to upload</label>
-                                    <input name="file" type="file" className="input w-full border mt-2 flex-1"/>
+                                    <input
+                                        type="file"
+                                        name="file"
+                                        className="input w-full border mt-2 flex-1"
+                                        onChange={(event) => {
+                                            console.log(event);
+                                            setFileToUpload(event.target.files[0]);
+                                        }}
+                                    />
                                 </div>
                             </div>
                             <div className="px-5 py-3 text-right border-t border-gray-200">
                                 <button
                                     className="button w-20 border text-gray-700 mr-1"
                                     onClick={() => {
-                                        setModalOpen(false)
+                                        setModalOpen(false);
+                                        setFileToUpload(null);
                                     }}
                                 >
                                     Cancel
                                 </button>
                                 <button
                                     className="button w-20 bg-green-500 text-white"
-                                    onClick={() => {
-                                        console.log('Gumagana pa!');
+                                    onClick={async () => {
+                                        if (fileToUpload == null) {
+                                            toastr.error('Please select a file to upload!');
+                                            return;
+                                        }
+
+                                        const formData = new FormData();
+                                        formData.append("file", fileToUpload);
+                                        formData.append("upload_to_department_id", activeSideMenu.id);
+                                        try {
+                                            const response = await axios({
+                                                method: "post",
+                                                url: "/files/upload",
+                                                data: formData,
+                                                headers: {"Content-Type": "multipart/form-data"},
+                                            });
+                                            if(response.data.success!==0){
+                                                toastr.error(response.data.message);
+                                            } else {
+                                                //TODO: reload table and close form
+                                            }
+                                        } catch (error) {
+                                            console.log(error)
+                                        }
                                     }}
                                 >
                                     Upload
