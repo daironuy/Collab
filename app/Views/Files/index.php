@@ -55,19 +55,23 @@
 
         const Content = () => {
             const {
-                activeSideMenu
+                activeSideMenu, setActiveSideMenu
             } = React.useContext(SideMenuContext)
 
             const [files, setFiles] = React.useState([]);
 
             const [isModalOpen, setModalOpen] = React.useState(false);
             const [fileToUpload, setFileToUpload] = React.useState(null);
+            const inputFileUpload = React.useRef(null);
 
             React.useEffect(() => {
                 setFiles([]);
                 if (activeSideMenu == null) {
                     return 0;
                 }
+
+                setFileToUpload(null);
+                inputFileUpload.current.value= null;
 
                 fetch('/files/getFiles/' + activeSideMenu.id)
                     .then(response => response.json())
@@ -176,8 +180,8 @@
                                         type="file"
                                         name="file"
                                         className="input w-full border mt-2 flex-1"
+                                        ref={inputFileUpload}
                                         onChange={(event) => {
-                                            console.log(event);
                                             setFileToUpload(event.target.files[0]);
                                         }}
                                     />
@@ -188,7 +192,6 @@
                                     className="button w-20 border text-gray-700 mr-1"
                                     onClick={() => {
                                         setModalOpen(false);
-                                        setFileToUpload(null);
                                     }}
                                 >
                                     Cancel
@@ -215,6 +218,10 @@
                                                 toastr.error(response.data.message);
                                             } else {
                                                 //TODO: reload table and close form
+                                                setModalOpen(false);
+                                                setActiveSideMenu(null);
+                                                setActiveSideMenu(activeSideMenu);
+                                                toastr.success('Successfully shared files to '+activeSideMenu.name+'!');
                                             }
                                         } catch (error) {
                                             console.log(error)
