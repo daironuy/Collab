@@ -37,7 +37,11 @@
                                         <div className="ml-2 overflow-hidden">
                                             <div
                                                 className={"flex items-center " + (activeSideMenu === sideMenu ? 'font-bold' : '')}>
-                                                {sideMenu.name}
+                                                {
+                                                    sideMenu.id == <?= session()->get('auth')['department_id'] ?> ?
+                                                        'Receive Files' :
+                                                        sideMenu.name
+                                                }
                                             </div>
                                         </div>
                                     </div>
@@ -61,11 +65,11 @@
 
             React.useEffect(() => {
                 setFiles([]);
-                if(activeSideMenu==null){
+                if (activeSideMenu == null) {
                     return 0;
                 }
 
-                fetch('/files/getFiles/'+activeSideMenu.id)
+                fetch('/files/getFiles/' + activeSideMenu.id)
                     .then(response => response.json())
                     .then((data) => {
                         setFiles(data);
@@ -77,9 +81,21 @@
             return (
                 <React.Fragment>
                     <div className="flex items-center p-2 border-b border-slate-200/60">
-                        <h2 className="font-medium text-base mr-auto">{activeSideMenu.name} Shared Files</h2>
+                        <h2 className="font-medium text-base mr-auto">
+                            {
+                                activeSideMenu.id == <?= session()->get('auth')['department_id'] ?> ?
+                                    'Receive Files' :
+                                    'Shared Files to ' + activeSideMenu.name
+                            }
+
+                        </h2>
                         <button
-                            className="button inline-block bg-green-500 text-white"
+                            className={ "button inline-block bg-green-500 text-white " +
+                                (
+                                    activeSideMenu.id==<?= session()->get('auth')['department_id'] ?> ?
+                                        'hidden':''
+                                )
+                            }
                             onClick={() => {
                                 setModalOpen(true);
                             }}
@@ -103,24 +119,29 @@
                                     </thead>
                                     <tbody>
                                     {
-                                        files.map((file)=>{
-                                            return(
-                                                <tr key={file.id}>
-                                                    <td>{file.id}</td>
-                                                    <td>{file.file_name}</td>
-                                                    <td>{file.file_size}</td>
-                                                    <td>
-                                                        {
-                                                            file.first_name + ' '+
-                                                            file.last_name + ' ('+
-                                                            file.uploader_department_name + ')'
-                                                        }
-                                                    </td>
-                                                    <td>{file.created_at}</td>
-                                                    <td>{file.id}</td>
-                                                </tr>
-                                            );
-                                        })
+                                        files.length != 0 ?
+                                            files.map((file) => {
+                                                return (
+                                                    <tr key={file.id}>
+                                                        <td>{file.id}</td>
+                                                        <td>{file.file_name}</td>
+                                                        <td>{file.file_size}</td>
+                                                        <td>
+                                                            {
+                                                                file.first_name + ' ' +
+                                                                file.last_name + ' (' +
+                                                                file.uploader_department_name + ')'
+                                                            }
+                                                        </td>
+                                                        <td>{file.created_at}</td>
+                                                        <td>{file.id}</td>
+                                                    </tr>
+                                                );
+                                            })
+                                            :
+                                            <tr>
+                                                <td colSpan="6" className="text-center">No Table Data</td>
+                                            </tr>
                                     }
                                     </tbody>
                                 </table>
@@ -190,7 +211,7 @@
                                                 data: formData,
                                                 headers: {"Content-Type": "multipart/form-data"},
                                             });
-                                            if(response.data.success!==0){
+                                            if (response.data.success !== 0) {
                                                 toastr.error(response.data.message);
                                             } else {
                                                 //TODO: reload table and close form
