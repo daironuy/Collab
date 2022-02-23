@@ -110,10 +110,106 @@ class Files extends BaseController
         exit();
     }
 
-    public function test()
-    {
-        pr($_REQUEST);
-        pr($_FILES);
+    public function download($departmentId, $fileId=0){
+        $departmentFileData = (new DepartmentFilesModel())
+            ->select('department_files.id, department_files.file_name, department_files.file_type, department_files.created_at, department_files.file_data')
+            ->select('uploader.first_name, uploader.last_name')
+            ->select('uploader_department.name as uploader_department_name')
+            ->select('CONCAT(ROUND(LENGTH(department_files.file_data)/1024, 1), \' KB\') AS file_size')
+            ->join('users as uploader', 'uploader.id=department_files.upload_by_user_id', 'left')
+            ->join('departments as uploader_department ', 'uploader_department.id=uploader.department_id', 'left')
+            ->where('uploader_department.id!=department_files.upload_to_department_id')
+            ->where('department_files.upload_to_department_id', $departmentId)
+            ->where('department_files.id', $fileId)
+        ;
+
+        if($departmentId==session()->get('auth')['department_id']){
+            $departmentFileData = $departmentFileData
+                ->where('uploader_department.id!='. session()->get('auth')['department_id'])
+                ->findAll();
+        }
+        else {
+            $departmentFileData = $departmentFileData
+                ->where('uploader_department.id', session()->get('auth')['department_id'])
+                ->findAll();
+        }
+
+        $errors = [];
+
+        if (!$departmentFileData) {
+            array_push($errors, 'You do not have file permission!');
+        }
+
+        if(count($errors)!=0){
+            echo json_encode([
+                'success' => -1,
+                'message' => '<ul class="list-disc pl-5"><li>' . implode('</li><li>', $errors) . '</li></ul>',
+                'data' => []
+            ]);
+
+            exit();
+        }
+
+        $departmentFileData = $departmentFileData[0];
+
+        header("Content-type: ".$departmentFileData['file_type']);
+        header("Content-Disposition: attachment; filename=".$departmentFileData['file_name']);
+        ob_clean();
+        flush();
+        echo $departmentFileData['file_data'];
+        exit();
+    }
+
+    public function delete($departmentId, $fileId=0){
+        $departmentFileData = (new DepartmentFilesModel())
+            ->select('department_files.id, department_files.file_name, department_files.file_type, department_files.created_at')
+            ->select('uploader.first_name, uploader.last_name')
+            ->select('uploader_department.name as uploader_department_name')
+            ->select('CONCAT(ROUND(LENGTH(department_files.file_data)/1024, 1), \' KB\') AS file_size')
+            ->join('users as uploader', 'uploader.id=department_files.upload_by_user_id', 'left')
+            ->join('departments as uploader_department ', 'uploader_department.id=uploader.department_id', 'left')
+            ->where('uploader_department.id!=department_files.upload_to_department_id')
+            ->where('department_files.upload_to_department_id', $departmentId)
+            ->where('department_files.id', $fileId)
+        ;
+
+        if($departmentId==session()->get('auth')['department_id']){
+            $departmentFileData = $departmentFileData
+                ->where('uploader_department.id!='. session()->get('auth')['department_id'])
+                ->findAll();
+        }
+        else {
+            $departmentFileData = $departmentFileData
+                ->where('uploader_department.id', session()->get('auth')['department_id'])
+                ->findAll();
+        }
+
+        $errors = [];
+
+        if (!$departmentFileData) {
+            array_push($errors, 'You do not have file permission!');
+        }
+
+        if(count($errors)!=0){
+            echo json_encode([
+                'success' => -1,
+                'message' => '<ul class="list-disc pl-5"><li>' . implode('</li><li>', $errors) . '</li></ul>',
+                'data' => []
+            ]);
+
+            exit();
+        }
+
+        (New DepartmentFilesModel())
+            ->where('id', $fileId)
+            ->delete()
+        ;
+
+        echo json_encode([
+            'success' => 0,
+            'message' => '',
+            'data' => []
+        ]);
         exit();
     }
 }
