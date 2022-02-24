@@ -50,7 +50,7 @@ $activeMenu = explode('/', uri_string())[0];
             <?php } else { ?>
 
             <li>
-                <a href="#" class="side-menu <?= $activeMenu=='messages'?'side-menu--active':'' ?>"">
+                <a href="/messages" class="side-menu <?= $activeMenu=='messages'?'side-menu--active':'' ?>"">
                     <div class="side-menu__icon"><i class="fa-solid fa-message"></i></div>
                     <div class="side-menu__title"> Messages</div>
                 </a>
@@ -74,7 +74,7 @@ $activeMenu = explode('/', uri_string())[0];
     </nav>
     <!-- END: Side Menu -->
     <!-- BEGIN: Content -->
-    <div class="content" style="min-height: calc(100vh - calc(1.25rem + 1.25rem))">
+    <div class="content flex flex-col" style="min-height: calc(100vh - calc(1.25rem + 1.25rem))">
         <div class="top-bar">
             <!-- BEGIN: Breadcrumb -->
             <div class="-intro-x breadcrumb mr-auto flex">
