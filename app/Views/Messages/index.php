@@ -54,15 +54,106 @@
                 activeSideMenu, setActiveSideMenu
             } = React.useContext(SideMenuContext)
 
+            const [messages, setMessages] = React.useState([]);
+            const [messageLoader, setmessageLoader] = React.useState(null);
+            const inputRef = new React.useRef(null);
+
+            React.useEffect(() => {
+                reloadMessages();
+
+                clearInterval(messageLoader);
+
+                setmessageLoader(
+                    setInterval(function () {
+                        if (activeSideMenu == null) return;
+                        reloadMessages();
+                    }, 1000)
+                );
+
+            }, [activeSideMenu]);
+
+            async function submitMessage() {
+                if (inputRef.current.value === '') return 0;
+
+                const formData = new FormData();
+                formData.append('department_id', activeSideMenu.id);
+                formData.append('message', inputRef.current.value);
+
+                inputRef.current.value = '';
+
+                await axios({
+                    method: "post",
+                    url: "/messages/add",
+                    data: formData,
+                });
+
+                reloadMessages();
+            }
+
+            async function reloadMessages() {
+                const data = await axios({
+                    method: "get",
+                    url: "/messages/getMessage/" + activeSideMenu.id
+                });
+
+                setMessages(data.data.data);
+            }
+
 
             return (
                 <React.Fragment>
-                    <div className="font-medium text-base p-4">
+                    <div className="font-medium text-base p-4" onClick={reloadMessages}>
                         {activeSideMenu.name} Messages
                     </div>
 
                     <div className="border-b border-slate-200/60"/>
-                    <div className="p-2" style={{height: 'calc(100vh - 328px)'}}>
+                    <div className="p-2 flex flex-col justify-end" style={{height: 'calc(100vh - 328px)'}}>
+                        {
+                            messages.map((message) => {
+                                return (
+                                    <React.Fragment key={message.id}>
+                                        <div className="clear-both"/>
+
+                                        {
+                                            message.user_id != <?= session()->get('auth')['id'] ?> ?
+                                                <div className="flex items-end float-left mb-4">
+                                                    <div
+                                                        className="bg-gray-300 px-4 py-3 text-slate-500 rounded-r-md rounded-t-md">
+                                                        <div className="font-bold">
+                                                            {message.first_name} {message.last_name}
+                                                            <span className="pl-1 font-normal text-xs">
+                                                                (
+                                                                {
+                                                                    message.user_department_id == activeSideMenu.id ?
+                                                                        activeSideMenu.name
+                                                                        :
+                                                                        '<?= session()->get('auth')['department']['name'] ?>'
+                                                                }
+                                                                )
+                                                            </span>
+                                                        </div>
+                                                        {message.message}
+                                                        <div className="mt-1 text-xs text-slate-500">
+                                                            {message.created_at}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                :
+                                                <div className="flex justify-end items-end float-right mb-4">
+                                                    <div
+                                                        className="bg-blue-500 px-4 py-3 text-white rounded-l-md rounded-t-md">
+                                                        {message.message}
+                                                        <div className="mt-1 text-xs text-white text-opacity-80">
+                                                            {message.created_at}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        }
+                                    </React.Fragment>
+                                );
+                            })
+                        }
+                        {/*
                         <div className="flex items-end float-left mb-4">
                             <div className="bg-gray-300 px-4 py-3 text-slate-500 rounded-r-md rounded-t-md">
                                 <div className="font-bold">Boom</div>
@@ -70,16 +161,20 @@
                                 <div className="mt-1 text-xs text-slate-500">10 secs ago</div>
                             </div>
                         </div>
+                        */}
 
+                        {/*
                         <div className="clear-both"/>
+                        */}
 
+                        {/*
                         <div className="flex items-end float-right mb-4">
                             <div className="bg-blue-500 px-4 py-3 text-white rounded-l-md rounded-t-md">
                                 Lorem ipsum
                                 <div className="mt-1 text-xs text-white text-opacity-80">1 secs ago</div>
                             </div>
                         </div>
-
+                        */}
                     </div>
                     <div className="border-b border-slate-200/60"/>
 
@@ -89,12 +184,22 @@
                             <input
                                 className="w-full border-transparent px-5 py-3 shadow-none focus:outline-0 focus:border-transparent focus:ring-0"
                                 placeholder="Type your message..."
-                                style={{border: 0}}
+                                style={{outline: 'none'}}
+                                ref={inputRef}
+                                onKeyDown={(event) => {
+                                    if (event.key === 'Enter') {
+                                        submitMessage();
+                                    }
+                                }}
                             />
                         </div>
-                        <div className="bg-primary-500 flex flex-row justify-center px-4">
+                        <div className="bg-primary-500 flex flex-row justify-center px-4"
+                             onClick={submitMessage}
+                        >
                             <button
-                                className="text-white">
+                                className="text-white"
+                                style={{outline: 'none'}}
+                            >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                      fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"
                                      strokeLinejoin="round" className="feather feather-send w-4 h-4">
