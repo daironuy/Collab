@@ -18,7 +18,7 @@
                 <React.Fragment>
                     <div className={
                         "cursor-pointer box relative flex items-center p-5 " +
-                        (activeSideMenu != null ? 'hidden' : '')
+                        (sideMenus.length === 0 ? '' : 'hidden')
                     }>
                         <div className="ml-2 overflow-hidden">
                             <div className={"flex items-center font-bold"}>
@@ -71,7 +71,7 @@
                             </div>
                         </div>
 
-                        <div class="clear-both"/>
+                        <div className="clear-both"/>
 
                         <div className="flex items-end float-right mb-4">
                             <div className="bg-blue-500 px-4 py-3 text-white rounded-l-md rounded-t-md">
@@ -117,7 +117,6 @@
                     .then(response => response.json())
                     .then((data) => {
                         setSideMenus(data);
-                        setActiveSideMenu(data[0]);
                     });
             }, []);
 
@@ -135,16 +134,29 @@
                                 </div>
                                 <div className="bg-white rounded w-3/4">
                                     {
-                                        activeSideMenu == null ?
-                                            (
-                                                <div className="p-5 overflow-hidden">
-                                                    <div className={"flex items-center font-bold"}>
-                                                        Loading. . .
+                                        sideMenus.length === 0 ?
+                                            <div className="p-5 overflow-hidden">
+                                                <div className={"flex items-center font-bold"}>
+                                                    Loading. . .
+                                                </div>
+                                            </div>
+                                            :
+                                            activeSideMenu == null ?
+                                                <div className="h-full flex flex-col">
+                                                    <div className="text-center my-auto">
+                                                        <div className="font-medium">
+                                                            Hey,
+                                                            <?= session()->get('auth')['first_name'] ?>
+                                                            <?= session()->get('auth')['last_name'] ?>
+                                                            !
+                                                        </div>
+                                                        <div className="text-slate-500 mt-1">
+                                                            Please select a chat to start messaging.
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            )
-                                            :
-                                            <Content/>
+                                                :
+                                                <Content/>
                                     }
                                 </div>
                             </div>
