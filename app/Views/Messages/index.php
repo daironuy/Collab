@@ -57,9 +57,11 @@
             const [messages, setMessages] = React.useState([]);
             const [messageLoader, setmessageLoader] = React.useState(null);
             const inputRef = new React.useRef(null);
+            const messageContainerRef = new React.useRef(null);
 
-            React.useEffect(() => {
-                reloadMessages();
+            React.useEffect(async () => {
+                await reloadMessages();
+                scrollMessageContainerToBottom();
 
                 clearInterval(messageLoader);
 
@@ -71,6 +73,10 @@
                 );
 
             }, [activeSideMenu]);
+
+            function scrollMessageContainerToBottom(){
+                messageContainerRef.current.scrollTop=messageContainerRef.current.scrollHeight;
+            }
 
             async function submitMessage() {
                 if (inputRef.current.value === '') return 0;
@@ -87,7 +93,8 @@
                     data: formData,
                 });
 
-                reloadMessages();
+                await reloadMessages();
+                scrollMessageContainerToBottom();
             }
 
             async function reloadMessages() {
@@ -107,7 +114,7 @@
                     </div>
 
                     <div className="border-b border-slate-200/60"/>
-                    <div className="p-2 flex flex-col justify-end" style={{height: 'calc(100vh - 328px)'}}>
+                    <div className="p-2  justify-end overflow-y-auto" ref={messageContainerRef} style={{height: 'calc(100vh - 328px)'}}>
                         {
                             messages.map((message) => {
                                 return (
