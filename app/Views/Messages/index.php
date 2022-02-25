@@ -32,12 +32,19 @@
                             return (
                                 <React.Fragment key={sideMenu.id}>
                                     <div className="cursor-pointer box relative flex items-center p-5" onClick={() => {
-                                        setActiveSideMenu(sideMenu);
+                                        setActiveSideMenu(sideMenu.id);
                                     }}>
                                         <div className="ml-2 overflow-hidden">
                                             <div
-                                                className={"flex items-center " + (activeSideMenu === sideMenu ? 'font-bold' : '')}>
+                                                className={"flex items-center " + (activeSideMenu === sideMenu.id ? 'font-bold' : '')}>
                                                 {sideMenu.name}
+                                                <div
+                                                    className={
+                                                        "pl-2 text-xs "+(parseInt(sideMenu.unread_messages_count)===0?'hidden':'')
+                                                    }
+                                                >
+                                                    {sideMenu.unread_messages_count} new messages
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -51,7 +58,7 @@
 
         const Content = () => {
             const {
-                activeSideMenu, setActiveSideMenu
+                activeSideMenu, sideMenus
             } = React.useContext(SideMenuContext)
 
             const [messages, setMessages] = React.useState([]);
@@ -69,7 +76,7 @@
                     setInterval(function () {
                         if (activeSideMenu == null) return;
                         reloadMessages();
-                    }, 1000)
+                    }, 3000)
                 );
 
             }, [activeSideMenu]);
@@ -82,7 +89,7 @@
                 if (inputRef.current.value === '') return 0;
 
                 const formData = new FormData();
-                formData.append('department_id', activeSideMenu.id);
+                formData.append('department_id', getDepartment().id);
                 formData.append('message', inputRef.current.value);
 
                 inputRef.current.value = '';
@@ -97,10 +104,22 @@
                 scrollMessageContainerToBottom();
             }
 
+            function getDepartment(){
+                let department
+
+                sideMenus.map((sideMenu)=>{
+                    if(sideMenu.id===activeSideMenu){
+                        department = sideMenu;
+                    }
+                });
+
+                return department;
+            }
+
             async function reloadMessages() {
                 const data = await axios({
                     method: "get",
-                    url: "/messages/getMessage/" + activeSideMenu.id
+                    url: "/messages/getMessage/" + getDepartment().id
                 });
 
                 setMessages(data.data.data);
@@ -110,7 +129,7 @@
             return (
                 <React.Fragment>
                     <div className="font-medium text-base p-4" onClick={reloadMessages}>
-                        {activeSideMenu.name} Messages
+                        {getDepartment().name} Messages
                     </div>
 
                     <div className="border-b border-slate-200/60"/>
@@ -230,6 +249,14 @@
                     .then((data) => {
                         setSideMenus(data);
                     });
+
+                setInterval(function () {
+                    fetch('/messages/getOtherDepartments')
+                        .then(response => response.json())
+                        .then((data) => {
+                            setSideMenus(data);
+                        });
+                }, 3000)
             }, []);
 
 
