@@ -24,7 +24,6 @@
                             <tr>
                                 <th class="whitespace-nowrap">ID</th>
                                 <th class="whitespace-nowrap">Name</th>
-                                <th class="whitespace-nowrap">Description</th>
                                 <th class="whitespace-nowrap">Action</th>
                             </tr>
                             </thead>
@@ -33,7 +32,6 @@
                                 <tr class="hover:bg-primary-100">
                                     <td><?= $department['id'] ?></td>
                                     <td><?= $department['name'] ?></td>
-                                    <td><?= $department['description'] ?></td>
                                     <td>
                                         <a href="#"
                                            class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
@@ -62,10 +60,6 @@
                     <div class="col-span-12">
                         <label>Name</label>
                         <input name="name" type="text" class="input w-full border mt-2 flex-1">
-                    </div>
-                    <div class="col-span-12">
-                        <label>Description</label>
-                        <input name="description" type="text" class="input w-full border mt-2 flex-1">
                     </div>
                 </div>
                 <div class="px-5 py-3 text-right border-t border-gray-200">

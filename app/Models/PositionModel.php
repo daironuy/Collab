@@ -4,10 +4,10 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class DepartmentModel extends Model
+class PositionModel extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'departments';
+    protected $table            = 'positions';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $insertID         = 0;

@@ -23,9 +23,6 @@ class Departments extends BaseController
         if($_REQUEST['name']==''){
             session()->setFlashdata('error', 'Department name is empty!');
             return redirect()->to('/departments');
-        } else if($_REQUEST['description']==''){
-            session()->setFlashdata('error', 'Department description is empty!');
-            return redirect()->to('/departments');
         }
 
         $departmentModel = new DepartmentModel();

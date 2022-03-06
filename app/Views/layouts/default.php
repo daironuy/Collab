@@ -27,46 +27,55 @@ $activeMenu = explode('/', uri_string())[0];
         <div class="side-nav__devider my-6"></div>
         <ul>
             <li>
-                <a href="/" class="side-menu <?= $activeMenu==''?'side-menu--active':'' ?>">
+                <a href="/" class="side-menu <?= $activeMenu == '' ? 'side-menu--active' : '' ?>">
                     <div class="side-menu__icon"><i class="fa-solid fa-house"></i></div>
                     <div class="side-menu__title"> Dashboard</div>
                 </a>
             </li>
 
-            <?php if(session()->get('auth')['is_admin']){ ?>
-            <li>
-                <a href="/users" class="side-menu <?= $activeMenu=='users'?'side-menu--active':'' ?>"">
+            <?php if (session()->get('auth')['is_admin']) { ?>
+                <li>
+                    <a href="/users" class="side-menu <?= $activeMenu == 'users' ? 'side-menu--active' : '' ?>"">
                     <div class="side-menu__icon"><i class="fa-solid fa-user"></i></div>
                     <div class="side-menu__title"> Users</div>
-                </a>
-            </li>
-            <li>
-                <a href="/departments" class="side-menu <?= $activeMenu=='departments'?'side-menu--active':'' ?>"">
+                    </a>
+                </li>
+                <li>
+                    <a href="/positions"
+                       class="side-menu <?= $activeMenu == 'positions' ? 'side-menu--active' : '' ?>"">
+                    <div class="side-menu__icon"><i class="fa-solid fa-users"></i></div>
+                    <div class="side-menu__title"> Positions</div>
+                    </a>
+                </li>
+                <li>
+                    <a href="/departments"
+                       class="side-menu <?= $activeMenu == 'departments' ? 'side-menu--active' : '' ?>"">
                     <div class="side-menu__icon"><i class="fa-solid fa-building"></i></div>
                     <div class="side-menu__title"> Departments</div>
-                </a>
-            </li>
+                    </a>
+                </li>
 
             <?php } else { ?>
 
-            <li>
-                <a href="/messages" class="side-menu <?= $activeMenu=='messages'?'side-menu--active':'' ?>"">
+                <li>
+                    <a href="/messages" class="side-menu <?= $activeMenu == 'messages' ? 'side-menu--active' : '' ?>"">
                     <div class="side-menu__icon"><i class="fa-solid fa-message"></i></div>
                     <div class="side-menu__title"> Messages</div>
-                </a>
-            </li>
-            <li>
-                <a href="/files" class="side-menu <?= $activeMenu=='files'?'side-menu--active':'' ?>"">
+                    </a>
+                </li>
+                <li>
+                    <a href="/files" class="side-menu <?= $activeMenu == 'files' ? 'side-menu--active' : '' ?>"">
                     <div class="side-menu__icon"><i class="fa-solid fa-square-share-nodes"></i></div>
                     <div class="side-menu__title"> File Sharing</div>
-                </a>
-            </li>
-            <li>
-                <a href="/departmentFiles/" class="side-menu <?= $activeMenu=='departmentFiles'?'side-menu--active':'' ?>"">
+                    </a>
+                </li>
+                <li>
+                    <a href="/departmentFiles/"
+                       class="side-menu <?= $activeMenu == 'departmentFiles' ? 'side-menu--active' : '' ?>"">
                     <div class="side-menu__icon"><i class="fa-solid fa-box-archive"></i></div>
                     <div class="side-menu__title"> Department Files</div>
-                </a>
-            </li>
+                    </a>
+                </li>
 
             <?php } ?>
 
@@ -92,7 +101,7 @@ $activeMenu = explode('/', uri_string())[0];
                 <div class="dropdown-box w-56">
                     <div class="dropdown-box__content box bg-theme-38 dark:bg-dark-6 text-white">
                         <div class="p-4 border-b border-theme-40 dark:border-dark-3">
-                            <div class="font-medium"><?php echo session()->get('auth')['first_name'].' '.session()->get('auth')['last_name'] ?></div>
+                            <div class="font-medium"><?php echo session()->get('auth')['first_name'] . ' ' . session()->get('auth')['last_name'] ?></div>
                             <div class="text-xs text-theme-41 dark:text-gray-600"><?= session()->get('auth')['department']['name'] ?></div>
                         </div>
                         <div class="p-2 border-t border-theme-40 dark:border-dark-3">
@@ -128,7 +137,7 @@ $activeMenu = explode('/', uri_string())[0];
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <script>
-    $(function(){
+    $(function () {
         toastr.options = {
             "closeButton": true,
             "debug": false,
@@ -156,9 +165,9 @@ $activeMenu = explode('/', uri_string())[0];
         <?php endif; ?>
     });
 
-    function linkConfirm(message, url){
+    function linkConfirm(message, url) {
         var confirm = window.confirm(message);
-        if(confirm){
+        if (confirm) {
             window.location.href = url;
         }
 
