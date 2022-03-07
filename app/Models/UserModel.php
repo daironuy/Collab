@@ -21,6 +21,7 @@ class UserModel extends Model
         'middle_name',
         'last_name',
         'department_id',
+        'position_id',
         'is_admin',
         'is_active'
     ];

@@ -78,11 +78,21 @@ foreach (['email', 'first_name', 'middle_name', 'last_name'] as $formKey) {
                            class="w-full intro-x login__input input input--lg border border-gray-300 block mt-4"
                            placeholder="Last Name" value="<?= $form['last_name'] ?>">
 
-                        <select name="department_id" class="form-select w-full intro-x login__input input input--lg border border-gray-300 block mt-4" aria-label="Department">
-                            <?php foreach($departments as $department){ ?>
-                                <option value="<?= $department['id'] ?>"><?= $department['name'] ?></option>
-                            <?php } ?>
-                        </select>
+                    <select name="department_id"
+                            class="form-select w-full intro-x login__input input input--lg border border-gray-300 block mt-4"
+                            aria-label="Department">
+                        <?php foreach ($departments as $department) { ?>
+                            <option value="<?= $department['id'] ?>"><?= $department['name'] ?></option>
+                        <?php } ?>
+                    </select>
+
+                    <select name="position_id"
+                            class="form-select w-full intro-x login__input input input--lg border border-gray-300 block mt-4"
+                            aria-label="Position">
+                        <?php foreach ($positions as $position) { ?>
+                            <option value="<?= $position['id'] ?>"><?= $position['name'] ?></option>
+                        <?php } ?>
+                    </select>
                 </div>
 
                 <div class="intro-x mt-5 xl:mt-8 text-center xl:text-left flex justify-center ">

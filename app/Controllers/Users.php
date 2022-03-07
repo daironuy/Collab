@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\DepartmentModel;
 use App\Models\LoginSecurityKeyModel;
+use App\Models\PositionModel;
 use App\Models\UserModel;
 
 class Users extends BaseController
@@ -186,7 +187,8 @@ class Users extends BaseController
 
         if (count($_POST) == 0) {
             echo view('users/register', [
-                'departments' => (New DepartmentModel())->findAll()
+                'departments' => (New DepartmentModel())->findAll(),
+                'positions'=>(new PositionModel())->findAll()
             ]);
             return 0;
         }
@@ -237,6 +239,7 @@ class Users extends BaseController
             'middle_name' => $this->request->getVar('middle_name'),
             'last_name' => $this->request->getVar('last_name'),
             'department_id' => $this->request->getVar('department_id'),
+            'position_id' => $this->request->getVar('position_id'),
             'is_admin' => false,
             'is_active' => false,
         ];

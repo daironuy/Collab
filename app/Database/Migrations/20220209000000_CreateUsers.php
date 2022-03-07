@@ -40,6 +40,11 @@ class CreateUsers extends Migration
                 'constraint' => 11,
                 'unsigned' => true,
             ],
+            'position_id' => [
+                'type' => 'INT',
+                'constraint' => 11,
+                'unsigned' => true,
+            ],
             'is_admin' => [
                 'type' => 'BOOLEAN',
             ],
