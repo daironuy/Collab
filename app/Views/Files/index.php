@@ -71,7 +71,7 @@
                 }
 
                 setFileToUpload(null);
-                inputFileUpload.current.value= null;
+                inputFileUpload.current.value = null;
 
                 fetch('/files/getFiles/' + activeSideMenu.id)
                     .then(response => response.json())
@@ -94,10 +94,10 @@
 
                         </h2>
                         <button
-                            className={ "button inline-block bg-green-500 text-white " +
+                            className={"button inline-block bg-green-500 text-white " +
                                 (
-                                    activeSideMenu.id==<?= session()->get('auth')['department_id'] ?> ?
-                                        'hidden':''
+                                    activeSideMenu.id == <?= session()->get('auth')['department_id'] ?> ?
+                                        'hidden' : ''
                                 )
                             }
                             onClick={() => {
@@ -134,13 +134,16 @@
                                                             {
                                                                 file.first_name + ' ' +
                                                                 file.last_name + ' (' +
-                                                                file.uploader_department_name + ')'
+                                                                file.uploader_department_name +
+                                                                ' - ' +
+                                                                file.uploader_position_name +
+                                                                ')'
                                                             }
                                                         </td>
                                                         <td>{file.created_at}</td>
                                                         <td className="flex gap-2">
                                                             <a href={
-                                                                '/files/download/'+activeSideMenu.id+'/'+file.id
+                                                                '/files/download/' + activeSideMenu.id + '/' + file.id
                                                             }
                                                                className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-1 px-2 rounded"
                                                                target="_blank"
@@ -150,12 +153,12 @@
 
                                                             <a href="#"
                                                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
-                                                               onClick={()=>{
-                                                                   let confirm = window.confirm('Are you sure you want to delete '+file.file_name);
+                                                               onClick={() => {
+                                                                   let confirm = window.confirm('Are you sure you want to delete ' + file.file_name);
 
-                                                                   if(!confirm) return;
+                                                                   if (!confirm) return;
 
-                                                                   let url = '/files/delete/'+activeSideMenu.id+'/'+file.id;
+                                                                   let url = '/files/delete/' + activeSideMenu.id + '/' + file.id;
                                                                    fetch(url)
                                                                        .then(response => response.json())
                                                                        .then((data) => {
@@ -164,7 +167,7 @@
                                                                            } else {
                                                                                setActiveSideMenu(null);
                                                                                setActiveSideMenu(activeSideMenu);
-                                                                               toastr.success('Successfully deleted '+file.file_name+'!');
+                                                                               toastr.success('Successfully deleted ' + file.file_name + '!');
                                                                            }
                                                                        });
                                                                }}
@@ -254,7 +257,7 @@
                                                 setModalOpen(false);
                                                 setActiveSideMenu(null);
                                                 setActiveSideMenu(activeSideMenu);
-                                                toastr.success('Successfully shared files to '+activeSideMenu.name+'!');
+                                                toastr.success('Successfully shared files to ' + activeSideMenu.name + '!');
                                             }
                                         } catch (error) {
                                             console.log(error)

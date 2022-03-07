@@ -32,15 +32,15 @@
                             return (
                                 <React.Fragment key={sideMenu.id}>
                                     <div className="cursor-pointer box relative flex items-center p-5" onClick={() => {
-                                        setActiveSideMenu(sideMenu.id);
+                                        setActiveSideMenu(sideMenu);
                                     }}>
                                         <div className="ml-2 overflow-hidden">
                                             <div
-                                                className={"flex items-center " + (activeSideMenu === sideMenu.id ? 'font-bold' : '')}>
+                                                className={"flex items-center " + ((activeSideMenu==null?null:activeSideMenu.id) === sideMenu.id ? 'font-bold' : '')}>
                                                 {sideMenu.name}
                                                 <div
                                                     className={
-                                                        "pl-2 text-xs "+(parseInt(sideMenu.unread_messages_count)===0?'hidden':'')
+                                                        "pl-2 text-xs " + (parseInt(sideMenu.unread_messages_count) === 0 ? 'hidden' : '')
                                                     }
                                                 >
                                                     {sideMenu.unread_messages_count} new messages
@@ -81,8 +81,8 @@
 
             }, [activeSideMenu]);
 
-            function scrollMessageContainerToBottom(){
-                messageContainerRef.current.scrollTop=messageContainerRef.current.scrollHeight;
+            function scrollMessageContainerToBottom() {
+                messageContainerRef.current.scrollTop = messageContainerRef.current.scrollHeight;
             }
 
             async function submitMessage() {
@@ -104,11 +104,11 @@
                 scrollMessageContainerToBottom();
             }
 
-            function getDepartment(){
+            function getDepartment() {
                 let department
 
-                sideMenus.map((sideMenu)=>{
-                    if(sideMenu.id===activeSideMenu){
+                sideMenus.map((sideMenu) => {
+                    if (sideMenu.id === activeSideMenu.id) {
                         department = sideMenu;
                     }
                 });
@@ -133,7 +133,8 @@
                     </div>
 
                     <div className="border-b border-slate-200/60"/>
-                    <div className="p-2  justify-end overflow-y-auto" ref={messageContainerRef} style={{height: 'calc(100vh - 328px)'}}>
+                    <div className="p-2  justify-end overflow-y-auto" ref={messageContainerRef}
+                         style={{height: 'calc(100vh - 328px)'}}>
                         {
                             messages.map((message) => {
                                 return (
@@ -150,10 +151,7 @@
                                                             <span className="pl-1 font-normal text-xs">
                                                                 (
                                                                 {
-                                                                    message.user_department_id == activeSideMenu.id ?
-                                                                        activeSideMenu.name
-                                                                        :
-                                                                        '<?= session()->get('auth')['department']['name'] ?>'
+                                                                    message.user_department_name+' - '+message.user_position_name
                                                                 }
                                                                 )
                                                             </span>

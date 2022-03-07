@@ -2,7 +2,7 @@
 
 <?= $this->section('content') ?>
     <div class="pt-2">
-        <div class="intro-y box xl:w-4/6">
+        <div class="intro-y box">
             <div class="flex items-center p-5 border-b border-slate-200/60">
                 <h2 class="font-medium text-base mr-auto"><?= $department['name'] ?> Files</h2>
                 <a href="javascript:;" data-toggle="modal" data-target="#new_form"
@@ -30,7 +30,7 @@
                                     <td><?= $file['id'] ?></td>
                                     <td><?= $file['file_name'] ?></td>
                                     <td><?= $file['file_size'] ?></td>
-                                    <td><?= $file['first_name'] . ' ' . $file['last_name'] ?></td>
+                                    <td><?= $file['first_name'] . ' ' . $file['last_name'].' - '.$file['position_name'] ?></td>
                                     <td><?= date_format(date_create($file['created_at']), "Y/m/d h:i:s A") ?></td>
                                     <td class="flex gap-2">
                                         <a href="/departmentFiles/download/<?= $file['id'] ?>"

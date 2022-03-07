@@ -102,7 +102,7 @@ $activeMenu = explode('/', uri_string())[0];
                     <div class="dropdown-box__content box bg-theme-38 dark:bg-dark-6 text-white">
                         <div class="p-4 border-b border-theme-40 dark:border-dark-3">
                             <div class="font-medium"><?php echo session()->get('auth')['first_name'] . ' ' . session()->get('auth')['last_name'] ?></div>
-                            <div class="text-xs text-theme-41 dark:text-gray-600"><?= session()->get('auth')['department']['name'] ?></div>
+                            <div class="text-xs text-theme-41 dark:text-gray-600"><?= session()->get('auth')['department']['name'] ?> - <?= session()->get('auth')['position']['name'] ?></div>
                         </div>
                         <div class="p-2 border-t border-theme-40 dark:border-dark-3">
                             <a href=""

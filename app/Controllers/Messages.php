@@ -64,11 +64,14 @@ class Messages extends BaseController
 
         $messages = (new MessageModel())
             ->select('messages.*,' .
-                'users.department_id as user_department_id,' .
+                'departments.name as user_department_name,' .
+                'positions.name as user_position_name,' .
                 'users.first_name,' .
                 'users.last_name'
             )
             ->join('users', 'messages.user_id=users.id')
+            ->join('positions', 'positions.id=users.position_id')
+            ->join('departments', 'departments.id=users.department_id')
             ->where('(' .
                 '   users.department_id=' . $currentDepartmentId . ' AND messages.department_id=' . $departmentId . '' .
                 ') OR (' .
