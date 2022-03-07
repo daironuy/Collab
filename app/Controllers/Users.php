@@ -164,6 +164,11 @@ class Users extends BaseController
             ->first()
         ;
 
+        $userData['position'] = (new PositionModel())
+            ->where('id', $userData['position_id'])
+            ->first()
+        ;
+
         $session->set([
             'auth'=>$userData,
             'loginSecurityKey'=>$loginSecurityKeyData
