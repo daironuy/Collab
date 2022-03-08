@@ -92,6 +92,7 @@ class DepartmentFiles extends BaseController
         ob_clean();
         flush();
         echo $departmentFileData['file_data'];
+        exit();
     }
 
     public function delete($id=0){
