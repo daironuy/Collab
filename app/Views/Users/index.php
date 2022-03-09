@@ -3,7 +3,7 @@
 <?= $this->section('content') ?>
 
 <div class="pt-2">
-    <div class="intro-y box xl:w-4/6">
+    <div class="intro-y box">
         <div class="flex flex-col items-center p-5 border-b border-slate-200/60">
             <h2 class="font-medium text-base mr-auto">User List</h2>
         </div>
@@ -18,6 +18,8 @@
                             <th class="whitespace-nowrap">First Name</th>
                             <th class="whitespace-nowrap">Middle Name</th>
                             <th class="whitespace-nowrap">Last Name</th>
+                            <th class="whitespace-nowrap">Department</th>
+                            <th class="whitespace-nowrap">Position</th>
                             <th class="whitespace-nowrap">Action</th>
                         </tr>
                         </thead>
@@ -29,6 +31,8 @@
                                 <td><?= $user['first_name'] ?></td>
                                 <td><?= $user['middle_name'] ?></td>
                                 <td><?= $user['last_name'] ?></td>
+                                <td><?= $user['department_name'] ?></td>
+                                <td><?= $user['position_name'] ?></td>
                                 <td class="flex gap-2">
                                     <?php if (!$user['is_active']) { ?>
                                         <a href="/users/activate/1/<?= $user['id'] ?>"

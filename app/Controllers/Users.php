@@ -27,7 +27,12 @@ class Users extends BaseController
         $userModel = new UserModel();
 
         return view('Users/index', [
-            'users' => $userModel->findAll()
+            'users' =>
+                $userModel
+                    ->select('users.*, departments.name AS department_name, positions.name AS position_name')
+                    ->join('departments', 'departments.id=users.department_id')
+                    ->join('positions', 'positions.id=users.position_id')
+                    ->findAll()
         ]);
     }
 
