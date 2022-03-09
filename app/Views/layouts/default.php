@@ -105,7 +105,7 @@ $activeMenu = explode('/', uri_string())[0];
                             <div class="text-xs text-theme-41 dark:text-gray-600"><?= session()->get('auth')['department']['name'] ?> - <?= session()->get('auth')['position']['name'] ?></div>
                         </div>
                         <div class="p-2 border-t border-theme-40 dark:border-dark-3">
-                            <a href=""
+                            <a href="/users/change_password"
                                class="flex items-center block p-2 transition duration-300 ease-in-out hover:bg-theme-1 dark:hover:bg-dark-3 rounded-md">
                                 <i class="fa-solid fa-key w-4 h-4 mr-2"></i> Change Password </a>
                             <a href="/users/logout"

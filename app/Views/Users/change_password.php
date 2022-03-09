@@ -28,24 +28,27 @@ foreach(['email'] as $formKey){
 ">
             <form method="post">
                 <h2 class="intro-x font-bold text-3xl text-center">
-                    Login to Collab
+                    Change Password
                 </h2>
                 <div class="intro-x mt-8">
-                    <input type="email" name="email" class="w-full intro-x login__input input input--lg border border-gray-300 block"
-                           placeholder="Email" value="<?= $form['email'] ?>">
-                    <input type="password" name="password"
+                    <input type="password" name="current_password" required="required"
                            class="w-full intro-x login__input input input--lg border border-gray-300 block mt-4"
-                           placeholder="Password">
+                           placeholder="Current Password">
+                    <input type="password" name="new_password" required="required"
+                           class="w-full intro-x login__input input input--lg border border-gray-300 block mt-4"
+                           placeholder="New Password">
+                    <input type="password" name="reenter_password" required="required"
+                           class="w-full intro-x login__input input input--lg border border-gray-300 block mt-4"
+                           placeholder="Reenter Password">
                 </div>
 
                 <div class="intro-x mt-5 xl:mt-8 text-center xl:text-left flex justify-center ">
-                    <a href="/users/register" class="button button--lg w-full xl:w-32 text-white text-gray-700 border border-gray-300 xl:mr-3 align-top">
-                        Register
+                    <a href="/" class="button button--lg w-full xl:w-32 text-white text-gray-700 border border-gray-300 xl:mr-3 align-top">
+                        Go Back
                     </a>
                     <button type="submit" class="button button--lg w-full xl:w-32 text-white bg-theme-1 xl:mr-3 align-top">
-                        Login
+                        Submit
                     </button>
-
                 </div>
             </form>
         </div>
@@ -77,10 +80,6 @@ foreach(['email'] as $formKey){
             "showMethod": "fadeIn",
             "hideMethod": "fadeOut"
         }
-
-        <?php if(session()->getFlashdata('success')): ?>
-        toastr.success('<?= session()->getFlashdata('success') ?>');
-        <?php endif; ?>
 
         <?php if(session()->getFlashdata('error')): ?>
         toastr.error('<?= session()->getFlashdata('error') ?>');

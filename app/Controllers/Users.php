@@ -303,6 +303,47 @@ class Users extends BaseController
         return redirect()->to('/');
     }
 
+    public function change_password(){
+        if (count($_POST) == 0) {
+            echo view('users/change_password');
+            return 0;
+        }
+
+        $errors = [];
+
+        if($this->request->getVar('current_password')==''){
+            array_push($errors, 'Current Password should not be empty!');
+        }
+        if($this->request->getVar('new_password')==''){
+            array_push($errors, 'Current Password should not be empty!');
+        }
+        if($this->request->getVar('new_password')!==$this->request->getVar('reenter_password')){
+            array_push($errors, 'Mismatch New Password and Reenter Password!');
+        }
+
+        if(count($errors)==0){
+            $userData = (new UserModel())->where('id', session()->get('auth')['id'])->first();
+            if(!password_verify($this->request->getVar('current_password'), $userData['password'])){
+                array_push($errors, 'Wrong Current Password!');
+            }
+        }
+
+        if(count($errors)!=0){
+            session()->setFlashdata('error', '<ul class="list-disc pl-5"><li>'.implode('</li><li>', $errors).'</li></ul>');
+            return redirect()->to('/users/change_password');
+        }
+
+        $userModel = new UserModel();
+        $userModel
+            ->set('password', password_hash($this->request->getVar('new_password'), PASSWORD_DEFAULT))
+            ->where('id', session()->get('auth')['id'])
+            ->update()
+        ;
+
+        session()->setFlashdata('success', 'Successfully change password!');
+        return redirect()->to('/users/logout');
+    }
+
     public function test(){
         return view('Users/index');
     }
