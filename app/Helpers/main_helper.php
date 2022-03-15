@@ -35,3 +35,15 @@ function getRandomString($length = 8) {
     }
     return $randomString;
 }
+
+function encrypt($text): string
+{
+    $encrypt = \Config\Services::encrypter();
+    return bin2hex($encrypt->encrypt($text));
+}
+
+function decrypt($text): string
+{
+    $encrypt = \Config\Services::encrypter();
+    return $encrypt->decrypt(hex2bin($text));;
+}

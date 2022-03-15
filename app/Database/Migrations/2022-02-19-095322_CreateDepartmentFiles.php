@@ -26,12 +26,10 @@ class CreateDepartmentFiles extends Migration
                 'unsigned' => true,
             ],
             'file_name' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255',
+                'type' => 'LONGTEXT',
             ],
             'file_type' => [
-                'type' => 'VARCHAR',
-                'constraint' => '255',
+                'type' => 'LONGTEXT',
             ],
             'file_data' => [
                 'type' => 'LONGBLOB',

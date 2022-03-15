@@ -48,7 +48,7 @@ class Email extends BaseConfig
      * @var string
      */
     // Enter your email id from where you send email
-    public $SMTPUser = 'toledana.sampling10@gmail.com';
+    public $SMTPUser = 'ad.collab.22@gmail.com';
 
     /**
      * SMTP Password
@@ -56,7 +56,7 @@ class Email extends BaseConfig
      * @var string
      */
     // Enter your email's password
-    public $SMTPPass = 'sampling10toledana';
+    public $SMTPPass = 'collab_2022';
     /**
      * SMTP Port
      *

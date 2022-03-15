@@ -66,9 +66,9 @@ class Files extends BaseController
         $insertData = [
             'upload_by_user_id' => session()->get('auth')['id'],
             'upload_to_department_id' => $_POST['upload_to_department_id'],
-            'file_name' => $_FILES['file']['name'],
-            'file_type' => $_FILES['file']['type'],
-            'file_data' => file_get_contents($_FILES['file']['tmp_name']),
+            'file_name' => encrypt($_FILES['file']['name']),
+            'file_type' => encrypt($_FILES['file']['type']),
+            'file_data' => encrypt(file_get_contents($_FILES['file']['tmp_name'])),
         ];
 
         $departmentFilesModel = new DepartmentFilesModel();
@@ -106,6 +106,10 @@ class Files extends BaseController
             $output = $output
                 ->where('uploader_department.id', session()->get('auth')['department_id'])
                 ->findAll();
+        }
+
+        foreach ($output as &$file){
+            $file['file_name'] = decrypt($file['file_name']);
         }
 
         echo json_encode($output);
@@ -154,11 +158,11 @@ class Files extends BaseController
 
         $departmentFileData = $departmentFileData[0];
 
-        header("Content-type: ".$departmentFileData['file_type']);
-        header("Content-Disposition: attachment; filename=".$departmentFileData['file_name']);
+        header("Content-type: ".decrypt($departmentFileData['file_type']));
+        header("Content-Disposition: attachment; filename=".decrypt($departmentFileData['file_name']));
         ob_clean();
         flush();
-        echo $departmentFileData['file_data'];
+        echo decrypt($departmentFileData['file_data']);
         exit();
     }
 
