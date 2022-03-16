@@ -94,7 +94,7 @@ class Users extends BaseController
         }
 
         if (count($_POST) == 0) {
-            echo view('users/login');
+            echo view('Users/login');
             return 0;
         }
 
