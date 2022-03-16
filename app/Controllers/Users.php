@@ -196,7 +196,7 @@ class Users extends BaseController
         }
 
         if (count($_POST) == 0) {
-            echo view('users/register', [
+            echo view('Users/register', [
                 'departments' => (New DepartmentModel())->findAll(),
                 'positions'=>(new PositionModel())->findAll()
             ]);
@@ -269,7 +269,7 @@ class Users extends BaseController
         }
 
         if (count($_POST) == 0) {
-            echo view('users/verify');
+            echo view('Users/verify');
             return 0;
         }
 
@@ -305,7 +305,7 @@ class Users extends BaseController
 
     public function change_password(){
         if (count($_POST) == 0) {
-            echo view('users/change_password');
+            echo view('Users/change_password');
             return 0;
         }
 
