@@ -54,7 +54,7 @@ class Messages extends BaseController
             ->save([
                 'user_id' => session()->get('auth')['id'],
                 'department_id' => $_POST['department_id'],
-                'message' => $_POST['message'],
+                'message' => encrypt($_POST['message']),
             ]);
     }
 
@@ -83,6 +83,10 @@ class Messages extends BaseController
 
         if(count($messages)>0){
             $this->updateLastMessageRead($departmentId, $messages[count($messages)-1]['id']);
+        }
+
+        foreach ($messages as &$message){
+            $message['message'] = decrypt($message['message']);
         }
 
         echo json_encode([
